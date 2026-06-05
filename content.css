@@ -26,6 +26,11 @@
     display: flex !important;
 }
 
+/* Add a transition to the container itself to smooth out any sub-pixel layout shifts */
+.yt-eq-container {
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
 /* Force border-box sizing to stop YouTube global CSS interference */
 .yt-eq-container * {
     box-sizing: border-box !important;
@@ -63,8 +68,8 @@
     justify-content: space-around !important;
     align-items: center !important;
     width: 100% !important;
-    padding: 24px 10px 16px !important;
-    /* Extra padding for spacious look */
+    padding-left: 10px !important;
+    padding-right: 10px !important;
 }
 
 .yt-eq-knob-container {
@@ -394,16 +399,43 @@ input:checked+.yt-eq-slider-toggle:before {
 
 /* --- Mode Contents --- */
 .yt-eq-mode-content {
-    display: none !important;
-}
-.yt-eq-mode-content.active {
     display: flex !important;
+    opacity: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+    transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                padding 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.3s ease !important;
+}
+
+.yt-eq-basic-controls.active {
+    opacity: 1 !important;
+    max-height: 180px !important;
+    padding-top: 24px !important;
+    padding-bottom: 16px !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.yt-eq-pro-controls.active {
+    opacity: 1 !important;
+    max-height: 250px !important;
+    padding-top: 20px !important;
+    padding-bottom: 16px !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 /* --- Pro Mode (10-Slider) --- */
 .yt-eq-pro-controls {
     flex-direction: row !important;
-    padding: 20px 16px 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
     gap: 16px !important;
 }
 .yt-eq-pro-bands {
