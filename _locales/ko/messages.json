@@ -1,0 +1,33 @@
+{
+    "extensionName": {
+        "message": "YouTube 이퀄라이저 & 노멀라이저 비활성화"
+    },
+    "extensionDescription": {
+        "message": "YouTube의 자동 볼륨 조절(노멀라이저)을 비활성화하고 3밴드/10밴드 이퀄라이저를 제공합니다."
+    },
+    "title": { "message": "이퀄라이저" },
+    "preamp": { "message": "프리앰프" },
+    "low": { "message": "저음" },
+    "mid": { "message": "중음" },
+    "high": { "message": "고음" },
+    "normalizerOff": { "message": "노멀라이저 비활성화됨" },
+    "normalizerOn": { "message": "노멀라이저" },
+    "limiter": { "message": "클리핑 방지 (Limiter)" },
+    "reset": { "message": "초기화" },
+    "tooltip": { "message": "이퀄라이저" },
+    "modeBasic": { "message": "3-Band" },
+    "modePro": { "message": "10-Band" },
+    "preset": { "message": "프리셋" },
+    "save": { "message": "저장" },
+    "customNamePrompt": { "message": "프리셋 이름을 입력하세요:" },
+    "presetFlat": { "message": "플랫" },
+    "presetBassBoost": { "message": "베이스 부스트" },
+    "presetVocal": { "message": "보컬 강조" },
+    "presetCinematic": { "message": "시네마틱" },
+    "presetPodcast": { "message": "팟캐스트" },
+    "customPresetsGroup": { "message": "사용자 지정 프리셋" },
+    "defaultPresetsGroup": { "message": "기본 프리셋" },
+    "deleteTitle": { "message": "프리셋 삭제" },
+    "deleteConfirm": { "message": "이 프리셋을 삭제하시겠습니까?" },
+    "customUnsaved": { "message": "사용자 지정" }
+}

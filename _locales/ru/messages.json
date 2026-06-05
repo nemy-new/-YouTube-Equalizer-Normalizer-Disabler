@@ -1,0 +1,33 @@
+{
+    "extensionName": {
+        "message": "YouTube Эквалайзер и Отключение Нормализатора"
+    },
+    "extensionDescription": {
+        "message": "Отключает автоматическую нормализацию громкости YouTube и предоставляет 3-полосный/10-полосный эквалайзер."
+    },
+    "title": { "message": "Эквалайзер" },
+    "preamp": { "message": "Преамп" },
+    "low": { "message": "Низкие" },
+    "mid": { "message": "Средние" },
+    "high": { "message": "Высокие" },
+    "normalizerOff": { "message": "Нормализатор Отключен" },
+    "normalizerOn": { "message": "Нормализатор" },
+    "limiter": { "message": "Лимитер (Антиклип)" },
+    "reset": { "message": "Сброс" },
+    "tooltip": { "message": "Эквалайзер" },
+    "modeBasic": { "message": "3-Band" },
+    "modePro": { "message": "10-Band" },
+    "preset": { "message": "Пресет" },
+    "save": { "message": "Сохранить" },
+    "customNamePrompt": { "message": "Введите имя пресета:" },
+    "presetFlat": { "message": "Плоский" },
+    "presetBassBoost": { "message": "Усиление басов" },
+    "presetVocal": { "message": "Четкость вокала" },
+    "presetCinematic": { "message": "Кинематографичный" },
+    "presetPodcast": { "message": "Подкаст" },
+    "customPresetsGroup": { "message": "Свои пресеты" },
+    "defaultPresetsGroup": { "message": "Стандартные" },
+    "deleteTitle": { "message": "Удалить Пресет" },
+    "deleteConfirm": { "message": "Вы уверены, что хотите удалить этот пресет?" },
+    "customUnsaved": { "message": "Свой" }
+}
