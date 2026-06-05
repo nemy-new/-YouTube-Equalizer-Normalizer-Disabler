@@ -32,7 +32,7 @@ YouTubeの自動音量調整（ノーマライザー）を解除し、プロ仕�
 ## Installation | インストール方法
 
 ### Chrome Web Store
-[Pending Publication]
+https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_source=item-share-cb
 
 ### Developer Mode (Local) / デベロッパーモード
 1. Clone this repository or download the ZIP. / このリポジトリをダウンロードします。
