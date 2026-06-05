@@ -93,37 +93,23 @@
     cursor: ns-resize !important;
 }
 
-/* Background dark ring */
-.yt-eq-knob-bg {
+/* SVG Container */
+.yt-eq-knob-svg {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    border-radius: 50% !important;
-    background: conic-gradient(from 225deg, rgba(255, 255, 255, 0.15) 270deg, transparent 270deg) !important;
-}
-
-/* Foreground value ring (The Meter) */
-.yt-eq-knob-fg {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 50% !important;
-    /* Set via JS */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4) !important;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) !important;
+    pointer-events: none !important;
 }
 
 /* Cutout center (The Dial) */
 .yt-eq-knob-center {
     position: absolute !important;
-    top: 10px !important;
-    left: 10px !important;
-    width: 64px !important;
-    height: 64px !important;
+    top: 8px !important;
+    left: 8px !important;
+    width: 68px !important;
+    height: 68px !important;
     border-radius: 50% !important;
     background-color: #1f1f1f !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
@@ -139,7 +125,7 @@
     width: 3px !important;
     height: 12px !important;
     background-color: #ffffff !important;
-    top: 6px !important;
+    top: 4px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     border-radius: 1.5px !important;

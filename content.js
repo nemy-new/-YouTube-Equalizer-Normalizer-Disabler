@@ -464,11 +464,44 @@ function createUI() {
         const wrapper = document.createElement('div');
         wrapper.className = 'yt-eq-knob-wrapper';
 
-        const bg = document.createElement('div');
-        bg.className = 'yt-eq-knob-bg';
+        // Use SVG for rounded rings
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("viewBox", "0 0 84 84");
+        svg.className = 'yt-eq-knob-svg';
 
-        const fg = document.createElement('div');
-        fg.className = 'yt-eq-knob-fg';
+        const r = 38; 
+        const c = 42;
+        const circumference = 2 * Math.PI * r;
+        const maxDash = 0.75 * circumference;
+
+        const bg = document.createElementNS(svgNS, "circle");
+        bg.setAttribute("cx", c);
+        bg.setAttribute("cy", c);
+        bg.setAttribute("r", r);
+        bg.setAttribute("fill", "none");
+        bg.setAttribute("stroke", "rgba(255, 255, 255, 0.15)");
+        bg.setAttribute("stroke-width", "8");
+        bg.setAttribute("stroke-linecap", "round");
+        bg.setAttribute("stroke-dasharray", `${maxDash} ${circumference}`);
+        bg.style.transform = "rotate(135deg)";
+        bg.style.transformOrigin = "50% 50%";
+
+        const fg = document.createElementNS(svgNS, "circle");
+        fg.setAttribute("cx", c);
+        fg.setAttribute("cy", c);
+        fg.setAttribute("r", r);
+        fg.setAttribute("fill", "none");
+        fg.setAttribute("stroke", "#ffffff");
+        fg.setAttribute("stroke-width", "8");
+        fg.setAttribute("stroke-linecap", "round");
+        fg.setAttribute("stroke-dasharray", `0 ${circumference}`);
+        fg.style.transform = "rotate(135deg)";
+        fg.style.transformOrigin = "50% 50%";
+        fg.style.filter = "drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))";
+
+        svg.appendChild(bg);
+        svg.appendChild(fg);
 
         const center = document.createElement('div');
         center.className = 'yt-eq-knob-center';
@@ -477,8 +510,7 @@ function createUI() {
         indicator.className = 'yt-eq-knob-indicator';
 
         center.appendChild(indicator);
-        wrapper.appendChild(bg);
-        wrapper.appendChild(fg);
+        wrapper.appendChild(svg);
         wrapper.appendChild(center);
 
         const valEl = document.createElement('div');
@@ -499,8 +531,8 @@ function createUI() {
             if (pct < 0) pct = 0;
             if (pct > 1) pct = 1;
 
-            const fillDeg = pct * 270;
-            fg.style.background = `conic-gradient(from 225deg, #ffffff ${fillDeg}deg, transparent ${fillDeg}deg)`;
+            const fillLength = pct * maxDash;
+            fg.setAttribute("stroke-dasharray", `${fillLength} ${circumference}`);
 
             const rotDeg = -135 + (pct * 270);
             center.style.transform = `rotate(${rotDeg}deg)`;
