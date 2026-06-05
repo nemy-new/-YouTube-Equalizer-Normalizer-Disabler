@@ -44,7 +44,7 @@
     background-color: transparent !important;
     border-bottom: none !important;
     padding: 0 16px !important;
-    height: 52px !important;
+    height: 44px !important;
 }
 
 .yt-eq-title-main {
@@ -195,7 +195,7 @@
 
 /* Footer & Normalizer Toggle */
 .yt-eq-footer {
-    padding: 8px 20px 20px !important;
+    padding: 8px 16px 16px !important;
     background-color: transparent !important;
     font-size: 15px !important;
     /* Increased text size */
@@ -309,7 +309,7 @@ input:checked+.yt-eq-slider-toggle:before {
     font-size: 13px !important;
     border-radius: 16px !important;
     cursor: pointer !important;
-    transition: all 0.2s !important;
+    transition: all 0.3s ease-in-out !important;
     opacity: 0.6 !important;
 }
 .yt-eq-mode-btn.active {
@@ -324,7 +324,7 @@ input:checked+.yt-eq-slider-toggle:before {
 .yt-eq-preset-container {
     display: flex !important;
     align-items: center !important;
-    padding: 12px 16px 0 !important;
+    padding: 8px 16px 0 !important;
     gap: 12px !important;
 }
 .yt-eq-preset-label {
@@ -430,13 +430,13 @@ input:checked+.yt-eq-slider-toggle:before {
     justify-content: space-around !important;
     align-items: center !important;
     width: 100% !important;
-    padding: 24px 10px 16px !important;
+    padding: 16px 10px 8px !important;
 }
 
 .yt-eq-pro-controls {
     display: flex !important;
     flex-direction: row !important;
-    padding: 20px 16px 16px !important;
+    padding: 16px 16px 8px !important;
     gap: 16px !important;
 }
 
