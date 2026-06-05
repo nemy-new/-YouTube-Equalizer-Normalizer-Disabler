@@ -1,6 +1,6 @@
 {
     "extensionName": {
-        "message": "YouTube 音量コントローラー & イコライザー"
+        "message": "YouTube イコライザー & ノーマライザー無効化"
     },
     "extensionDescription": {
         "message": "YouTubeの自動音量調整(ノーマライザー)を無効化し、3バンド/10バンドのイコライザーを提供します。"
