@@ -495,24 +495,14 @@ function createUI() {
 
         const render = () => {
             const val = getVal();
-            // EQ goes from -20 to +20, so normalized is -1 to 1
-            let normalized = val / 20;
-            if (normalized < -1) normalized = -1;
-            if (normalized > 1) normalized = 1;
+            let pct = (val + 20) / 40;
+            if (pct < 0) pct = 0;
+            if (pct > 1) pct = 1;
 
-            const centerDeg = 135;
-            const spanDeg = 135;
-            const color = '#ffb74d'; // Soft orange/amber matching the UI
+            const fillDeg = pct * 270;
+            fg.style.background = `conic-gradient(from 225deg, #ffffff ${fillDeg}deg, transparent ${fillDeg}deg)`;
 
-            if (normalized >= 0) {
-                const endDeg = centerDeg + (normalized * spanDeg);
-                fg.style.background = `conic-gradient(from 225deg, transparent ${centerDeg}deg, ${color} ${centerDeg}deg, ${color} ${endDeg}deg, transparent ${endDeg}deg)`;
-            } else {
-                const startDeg = centerDeg - (Math.abs(normalized) * spanDeg);
-                fg.style.background = `conic-gradient(from 225deg, transparent ${startDeg}deg, ${color} ${startDeg}deg, ${color} ${centerDeg}deg, transparent ${centerDeg}deg)`;
-            }
-
-            const rotDeg = (normalized * 135);
+            const rotDeg = -135 + (pct * 270);
             center.style.transform = `rotate(${rotDeg}deg)`;
 
             valEl.textContent = `${val > 0 ? '+' : ''}${val.toFixed(1)}dB`;
