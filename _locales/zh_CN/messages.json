@@ -1,0 +1,33 @@
+{
+    "extensionName": {
+        "message": "YouTube 均衡器 & 音量标准化禁用器"
+    },
+    "extensionDescription": {
+        "message": "禁用 YouTube 的自动音量标准化，并提供 3 段/10 段均衡器。"
+    },
+    "title": { "message": "均衡器" },
+    "preamp": { "message": "前置放大器" },
+    "low": { "message": "低音" },
+    "mid": { "message": "中音" },
+    "high": { "message": "高音" },
+    "normalizerOff": { "message": "音量标准化已禁用" },
+    "normalizerOn": { "message": "音量标准化" },
+    "limiter": { "message": "防破音 (Limiter)" },
+    "reset": { "message": "重置" },
+    "tooltip": { "message": "均衡器" },
+    "modeBasic": { "message": "3-Band" },
+    "modePro": { "message": "10-Band" },
+    "preset": { "message": "预设" },
+    "save": { "message": "保存" },
+    "customNamePrompt": { "message": "请输入预设名称：" },
+    "presetFlat": { "message": "平坦" },
+    "presetBassBoost": { "message": "低音增强" },
+    "presetVocal": { "message": "人声增强" },
+    "presetCinematic": { "message": "影院" },
+    "presetPodcast": { "message": "播客" },
+    "customPresetsGroup": { "message": "自定义预设" },
+    "defaultPresetsGroup": { "message": "默认预设" },
+    "deleteTitle": { "message": "删除预设" },
+    "deleteConfirm": { "message": "您确定要删除此预设吗？" },
+    "customUnsaved": { "message": "自定义" }
+}

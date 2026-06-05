@@ -1,6 +1,6 @@
 # YouTube Volume Controller & Equalizer
 
-[English](#english) | [日本語 (Japanese)](#日本語) | [한국어 (Korean)](#한국어) | [Русский (Russian)](#русский)
+[English](#english) | [日本語 (Japanese)](#日本語) | [简体中文 (Simplified Chinese)](#简体中文) | [한국어 (Korean)](#한국어) | [Русский (Russian)](#русский)
 
 ---
 
@@ -169,3 +169,45 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 
 ### Лицензия
 Этот проект распространяется под лицензией MIT — подробности см. в файле [LICENSE](LICENSE).
+
+---
+
+<a id="简体中文"></a>
+## 简体中文
+
+YouTube 音频增强扩展程序。禁用 YouTube 的自动音量标准化，并提供专业级均衡器（3 段/10 段）、前置放大器和防破音限制器。
+
+### 特点
+- **禁用音量标准化**：解除 YouTube 的自动音量平衡，恢复原始音轨的动态范围。
+- **两种均衡器模式**：
+  - **3-Band (Basic)**：通过旋钮快速调整低音、中音和高音。
+  - **10-Band (Pro)**：从 32Hz 到 16kHz 的 10 段精确滑块控制。
+- **预设管理**：内置预设（低音增强、人声等），并支持保存、命名和管理您自己的自定义预设。
+- **前置放大器**：为声音较小的视频提供整体音量提升。
+- **防破音 (Limiter)**：即使大幅度增强频率，也能自动防止声音失真和破音。
+- **无缝 UI**：精美的深色模式界面，完美融入 YouTube 播放器控制栏。
+
+### 安装方法
+
+#### Chrome 网上应用店
+https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_source=item-share-cb
+
+#### 手动安装（适用于 Edge、Firefox 和本地 Chrome）
+
+首先，将此存储库下载为 ZIP 文件并解压缩。
+
+##### Google Chrome & Microsoft Edge
+1. 打开扩展程序页面。
+   - Chrome: `chrome://extensions/`
+   - Edge: `edge://extensions/`
+2. 开启 **开发者模式**。
+3. 点击 **加载已解压的扩展程序**，然后选择解压后的文件夹。
+
+##### Mozilla Firefox
+1. 打开调试页面：`about:debugging#/runtime/this-firefox`
+2. 点击 **临时载入附加组件...**
+3. 选择解压后文件夹内的 `manifest.json` 文件。
+*(注意：Firefox 的临时附加组件会在浏览器重新启动后移除。)*
+
+### 许可证
+本项目采用 MIT 许可证 — 详情请参见 [LICENSE](LICENSE) 文件。
