@@ -42,7 +42,7 @@ First, download this repository as a ZIP file and extract it.
 *(Note: Firefox temporary add-ons are removed when the browser restarts.)*
 
 ### License
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -84,4 +84,4 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 *(注意: Firefoxの一時的なアドオンは、ブラウザを再起動すると解除されます。)*
 
 ### ライセンス
-MIT License
+このプロジェクトは MIT License のもとで公開されています。詳細は [LICENSE](LICENSE) ファイルをご覧ください。
