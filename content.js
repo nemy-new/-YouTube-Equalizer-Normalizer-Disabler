@@ -11,36 +11,39 @@ let currentVideoElement = null;
 const EQ_BANDS = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const EQ_BANDS_LABELS = ['32Hz', '64Hz', '125Hz', '250Hz', '500Hz', '1kHz', '2kHz', '4kHz', '8kHz', '16kHz'];
 
-// Multi-language Support
-const I18N = {
+const I18N_FALLBACK = {
     ja: {
-        title: 'イコライザー',
-        preamp: 'プリアンプ',
-        low: '低音',
-        mid: '中域',
-        high: 'トレブル',
-        normalizerOff: 'ノーマライザー無効化',
-        normalizerOn: 'ノーマライザー',
-        limiter: '音割れ防止 (Limiter)',
-        reset: 'Reset',
-        tooltip: 'イコライザー'
+        title: 'イコライザー', preamp: 'Pre', low: '低音', mid: '中域', high: 'トレブル',
+        normalizerOff: 'ノーマライザー無効化', normalizerOn: 'ノーマライザー', limiter: '音割れ防止 (Limiter)',
+        reset: 'リセット', tooltip: 'イコライザー', modeBasic: '3-Band', modePro: '10-Band',
+        preset: 'プリセット', save: '保存', customNamePrompt: 'プリセット名を入力してください:',
+        presetFlat: 'フラット', presetBassBoost: '低音ブースト', presetVocal: 'ボーカル強調',
+        presetCinematic: 'シネマティック', presetPodcast: 'ポッドキャスト',
+        customPresetsGroup: 'カスタム', defaultPresetsGroup: 'デフォルト',
+        deleteTitle: 'プリセットを削除', deleteConfirm: 'このプリセットを削除しますか？',
+        customUnsaved: 'カスタム'
     },
     en: {
-        title: 'Equalizer',
-        preamp: 'Preamp',
-        low: 'Low',
-        mid: 'Mid',
-        high: 'High',
-        normalizerOff: 'Normalizer Disabled',
-        normalizerOn: 'Normalizer',
-        limiter: 'Limiter (Anti-clip)',
-        reset: 'Reset',
-        tooltip: 'Equalizer'
+        title: 'Equalizer', preamp: 'Preamp', low: 'Low', mid: 'Mid', high: 'High',
+        normalizerOff: 'Normalizer Disabled', normalizerOn: 'Normalizer', limiter: 'Limiter (Anti-clip)',
+        reset: 'Reset', tooltip: 'Equalizer', modeBasic: '3-Band', modePro: '10-Band',
+        preset: 'Preset', save: 'Save', customNamePrompt: 'Enter preset name:',
+        presetFlat: 'Flat', presetBassBoost: 'Bass Boost', presetVocal: 'Vocal Clarity',
+        presetCinematic: 'Cinematic', presetPodcast: 'Podcast',
+        customPresetsGroup: 'Custom Presets', defaultPresetsGroup: 'Default Presets',
+        deleteTitle: 'Delete Preset', deleteConfirm: 'Are you sure you want to delete this preset?',
+        customUnsaved: 'Custom (Unsaved)'
     }
 };
 
-const LANG = navigator.language.startsWith('ja') ? 'ja' : 'en';
-const getMsg = (key) => I18N[LANG][key] || I18N['en'][key];
+const getMsg = (key) => {
+    try {
+        const msg = chrome.i18n.getMessage(key);
+        if (msg) return msg;
+    } catch (e) {}
+    const lang = navigator.language.startsWith('ja') ? 'ja' : 'en';
+    return I18N_FALLBACK[lang][key] || key;
+};
 
 // Default Settings
 const DEFAULT_SETTINGS = {
@@ -48,26 +51,45 @@ const DEFAULT_SETTINGS = {
     bands: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     enabled: true,
     normalizerEnabled: true,
-    limiterEnabled: true
+    limiterEnabled: true,
+    mode: 'basic',
+    activePreset: 'Flat',
+    customPresets: []
 };
+
+const DEFAULT_PRESETS = [
+    { id: 'Flat', bands: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preamp: 0 },
+    { id: 'BassBoost', bands: [6, 5, 4, 1, 0, 0, 0, 0, 0, 0], preamp: -1 },
+    { id: 'Vocal', bands: [0, 0, -1, -1, 2, 4, 3, 1, 0, 0], preamp: -1 },
+    { id: 'Cinematic', bands: [5, 4, 2, 0, -1, -1, 1, 3, 4, 5], preamp: -2 },
+    { id: 'Podcast', bands: [-2, -2, -1, 1, 3, 4, 3, 1, -1, -2], preamp: 0 }
+];
 
 let eqSettings = { ...DEFAULT_SETTINGS };
 
 // Load settings
 function loadSettings() {
-    const saved = localStorage.getItem('yt-eq-settings');
-    if (saved) {
-        try {
-            eqSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
-        } catch (e) {
-            console.error('Failed to parse EQ settings', e);
+    try {
+        const saved = localStorage.getItem('yt-eq-settings');
+        if (saved) {
+            try {
+                eqSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+            } catch (e) {
+                console.error('Failed to parse EQ settings', e);
+            }
         }
+    } catch (e) {
+        console.warn('localStorage access denied or unavailable', e);
     }
 }
 
 // Save settings
 function saveSettings() {
-    localStorage.setItem('yt-eq-settings', JSON.stringify(eqSettings));
+    try {
+        localStorage.setItem('yt-eq-settings', JSON.stringify(eqSettings));
+    } catch (e) {
+        console.warn('localStorage access denied or unavailable', e);
+    }
 }
 
 function initWebAudio(video) {
@@ -216,7 +238,6 @@ function createUI() {
     const titleMain = document.createElement('div');
     titleMain.className = 'yt-eq-title-main';
 
-    // SVG Musical Note Icon
     const svgNS = "http://www.w3.org/2000/svg";
     const iconSvg = document.createElementNS(svgNS, "svg");
     iconSvg.setAttribute("width", "18");
@@ -234,6 +255,21 @@ function createUI() {
     titleMain.appendChild(iconSvg);
     titleMain.appendChild(titleText);
 
+    // --- Mode Toggle ---
+    const modeToggle = document.createElement('div');
+    modeToggle.className = 'yt-eq-mode-toggle';
+    
+    const btnBasic = document.createElement('button');
+    btnBasic.textContent = getMsg('modeBasic');
+    btnBasic.className = `yt-eq-mode-btn ${eqSettings.mode === 'basic' ? 'active' : ''}`;
+    
+    const btnPro = document.createElement('button');
+    btnPro.textContent = getMsg('modePro');
+    btnPro.className = `yt-eq-mode-btn ${eqSettings.mode === 'pro' ? 'active' : ''}`;
+
+    modeToggle.appendChild(btnBasic);
+    modeToggle.appendChild(btnPro);
+
     const closeBtn = document.createElement('button');
     closeBtn.className = 'yt-eq-close';
     closeBtn.textContent = '\u2715';
@@ -243,13 +279,167 @@ function createUI() {
     };
 
     header.appendChild(titleMain);
+    header.appendChild(modeToggle);
     header.appendChild(closeBtn);
+
+    // --- Preset Controls ---
+    const presetContainer = document.createElement('div');
+    presetContainer.className = 'yt-eq-preset-container';
+
+    const presetLabel = document.createElement('span');
+    presetLabel.textContent = getMsg('preset') + ': ';
+    presetLabel.className = 'yt-eq-preset-label';
+
+    const presetSelect = document.createElement('select');
+    presetSelect.className = 'yt-eq-preset-select';
+    
+    const renderPresetOptions = () => {
+        presetSelect.textContent = '';
+        const customOptGroup = document.createElement('optgroup');
+        customOptGroup.label = getMsg('customPresetsGroup') || 'Custom Presets';
+        const defaultOptGroup = document.createElement('optgroup');
+        defaultOptGroup.label = getMsg('defaultPresetsGroup') || 'Default Presets';
+
+        // Add custom presets first if any
+        if (eqSettings.customPresets && eqSettings.customPresets.length > 0) {
+            eqSettings.customPresets.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = p.name;
+                customOptGroup.appendChild(opt);
+            });
+            presetSelect.appendChild(customOptGroup);
+        }
+
+        DEFAULT_PRESETS.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = getMsg(`preset${p.id}`) || p.id;
+            defaultOptGroup.appendChild(opt);
+        });
+        presetSelect.appendChild(defaultOptGroup);
+
+        if (eqSettings.activePreset === 'Custom') {
+            const customUnsavedOpt = document.createElement('option');
+            customUnsavedOpt.value = 'Custom';
+            customUnsavedOpt.textContent = getMsg('customUnsaved');
+            presetSelect.insertBefore(customUnsavedOpt, presetSelect.firstChild);
+        }
+        
+        // Custom check: if activePreset doesn't exist anymore, set to Flat
+        let exists = DEFAULT_PRESETS.some(p => p.id === eqSettings.activePreset) || 
+                     (eqSettings.customPresets && eqSettings.customPresets.some(p => p.name === eqSettings.activePreset)) ||
+                     eqSettings.activePreset === 'Custom';
+        if (!exists) eqSettings.activePreset = 'Flat';
+        
+        presetSelect.value = eqSettings.activePreset;
+    };
+    renderPresetOptions();
+
+    let proSliders = []; // Declare early to use in applyPreset
+    let basicKnobs = []; // Declare early to use in applyPreset
+
+    const applyPreset = (presetObj) => {
+        eqSettings.preamp = presetObj.preamp;
+        eqSettings.bands = [...presetObj.bands];
+        applyEQSettingsToNodes();
+        basicKnobs.forEach(k => k.render());
+        proSliders.forEach(s => s.render());
+        saveSettings();
+    };
+
+    const updateDeleteBtnVisibility = (val) => {
+        const isCustom = eqSettings.customPresets && eqSettings.customPresets.some(p => p.name === val);
+        presetDeleteBtn.style.display = isCustom ? 'flex' : 'none';
+    };
+
+    presetSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        eqSettings.activePreset = val;
+        
+        const defPreset = DEFAULT_PRESETS.find(p => p.id === val);
+        if (defPreset) {
+            applyPreset(defPreset);
+        } else {
+            const custPreset = eqSettings.customPresets.find(p => p.name === val);
+            if (custPreset) {
+                applyPreset(custPreset);
+            }
+        }
+        
+        renderPresetOptions();
+        updateDeleteBtnVisibility(val);
+    });
+
+    const presetDeleteBtn = document.createElement('button');
+    presetDeleteBtn.className = 'yt-eq-preset-delete';
+    
+    // Create SVG for trash can
+    const delSvgNS = "http://www.w3.org/2000/svg";
+    const delSvg = document.createElementNS(delSvgNS, "svg");
+    delSvg.setAttribute("viewBox", "0 -960 960 960");
+    delSvg.setAttribute("width", "100%");
+    delSvg.setAttribute("height", "100%");
+    const delPath = document.createElementNS(delSvgNS, "path");
+    delPath.setAttribute("d", "M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z");
+    delSvg.appendChild(delPath);
+    presetDeleteBtn.appendChild(delSvg);
+
+    presetDeleteBtn.title = getMsg('deleteTitle');
+    presetDeleteBtn.style.display = 'none';
+    presetDeleteBtn.onclick = () => {
+        if (confirm(getMsg('deleteConfirm'))) {
+            eqSettings.customPresets = eqSettings.customPresets.filter(p => p.name !== eqSettings.activePreset);
+            eqSettings.activePreset = 'Flat';
+            saveSettings();
+            renderPresetOptions();
+            applyPreset(DEFAULT_PRESETS.find(p => p.id === 'Flat'));
+            updateDeleteBtnVisibility('Flat');
+        }
+    };
+
+    const presetSaveBtn = document.createElement('button');
+    presetSaveBtn.className = 'yt-eq-preset-save';
+    presetSaveBtn.textContent = getMsg('save');
+    presetSaveBtn.onclick = () => {
+        const name = window.prompt(getMsg('customNamePrompt'), 'My Preset');
+        if (name && name.trim()) {
+            const newPreset = {
+                name: name.trim(),
+                bands: [...eqSettings.bands],
+                preamp: eqSettings.preamp
+            };
+            if (!eqSettings.customPresets) eqSettings.customPresets = [];
+            const existingIdx = eqSettings.customPresets.findIndex(p => p.name === newPreset.name);
+            if (existingIdx >= 0) {
+                eqSettings.customPresets[existingIdx] = newPreset;
+            } else {
+                eqSettings.customPresets.push(newPreset);
+            }
+            eqSettings.activePreset = newPreset.name;
+            saveSettings();
+            renderPresetOptions();
+            updateDeleteBtnVisibility(newPreset.name);
+        }
+    };
+
+    const presetSelectWrapper = document.createElement('div');
+    presetSelectWrapper.className = 'yt-eq-preset-select-wrapper';
+    presetSelectWrapper.appendChild(presetSelect);
+    presetSelectWrapper.appendChild(presetDeleteBtn);
+
+    presetContainer.appendChild(presetLabel);
+    presetContainer.appendChild(presetSelectWrapper);
+    presetContainer.appendChild(presetSaveBtn);
+
+    // After renderPresetOptions is called initially, update delete button
+    setTimeout(() => updateDeleteBtnVisibility(eqSettings.activePreset), 100);
 
     // ====== BASIC MODE (3-Knob) ======
     const basicContent = document.createElement('div');
-    basicContent.className = 'yt-eq-basic-controls';
+    basicContent.className = 'yt-eq-basic-controls yt-eq-mode-content';
+    if (eqSettings.mode === 'basic') basicContent.classList.add('active');
 
-    // Helper: Rotary Knob
     const createRotaryKnob = (label, getVal, onValChange) => {
         const container = document.createElement('div');
         container.className = 'yt-eq-knob-container';
@@ -288,11 +478,10 @@ function createUI() {
         let isDragging = false;
         let startY = 0;
         let startVal = 0;
-        const SENSITIVITY = 0.3; // db per pixel
+        const SENSITIVITY = 0.3;
 
         const render = () => {
             const val = getVal();
-            // -20dB to 20dB mapped to 225deg to 495deg (270 arc)
             let pct = (val + 20) / 40;
             if (pct < 0) pct = 0;
             if (pct > 1) pct = 1;
@@ -300,10 +489,9 @@ function createUI() {
             const fillDeg = pct * 270;
             fg.style.background = `conic-gradient(from 225deg, #ffffff ${fillDeg}deg, transparent ${fillDeg}deg)`;
 
-            // Rotate indicator inside center
             const rotDeg = -135 + (pct * 270);
             indicator.style.transform = `rotate(${rotDeg}deg)`;
-            center.style.transform = `rotate(${rotDeg}deg)`; // Also rotate the dial for better feedback
+            center.style.transform = `rotate(${rotDeg}deg)`;
 
             valEl.textContent = `${val > 0 ? '+' : ''}${val.toFixed(1)}dB`;
         };
@@ -313,21 +501,24 @@ function createUI() {
             startY = e.clientY;
             startVal = getVal();
             document.body.style.userSelect = 'none';
+            eqSettings.activePreset = 'Custom'; // Modify invalidates preset
+            renderPresetOptions();
         });
 
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            const dy = startY - e.clientY; // up is positive
+            const dy = startY - e.clientY;
             const newVal = Math.max(-20, Math.min(20, startVal + (dy * SENSITIVITY)));
             onValChange(newVal);
             render();
+            proSliders.forEach(s => s.render()); // Sync pro sliders
         });
 
         window.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
                 document.body.style.userSelect = '';
-                saveSettings(); // save only on mouse release
+                saveSettings();
             }
         });
 
@@ -335,13 +526,6 @@ function createUI() {
         return { container, render };
     };
 
-    // Audio Mapping for Basic Mode -> Advanced Arrays
-    // Low: 32, 64, 125 (indices 0, 1, 2)
-    // Mid: 250, 500, 1k, 2k (indices 3, 4, 5, 6)
-    // High: 4k, 8k, 16k (indices 7, 8, 9)
-    const basicKnobs = [];
-
-    // Helper to get average of bands for basic knob visualization
     const getAvgBand = (indices) => {
         const sum = indices.reduce((a, idx) => a + eqSettings.bands[idx], 0);
         return sum / indices.length;
@@ -368,6 +552,114 @@ function createUI() {
     basicContent.appendChild(knobLow.container);
     basicContent.appendChild(knobMid.container);
     basicContent.appendChild(knobHigh.container);
+
+    // ====== PRO MODE (10-Slider) ======
+    const proContent = document.createElement('div');
+    proContent.className = 'yt-eq-pro-controls yt-eq-mode-content';
+    if (eqSettings.mode === 'pro') proContent.classList.add('active');
+
+    const createSlider = (label, getVal, onValChange) => {
+        const container = document.createElement('div');
+        container.className = 'yt-eq-slider-col';
+
+        const valEl = document.createElement('div');
+        valEl.className = 'yt-eq-slider-val';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'yt-eq-vertical-slider-wrapper';
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = '-20';
+        slider.max = '20';
+        slider.step = '0.1';
+        slider.className = 'yt-eq-vertical-slider';
+
+        const labelEl = document.createElement('div');
+        labelEl.className = 'yt-eq-slider-label';
+        labelEl.textContent = label;
+
+        sliderWrapper.appendChild(slider);
+        container.appendChild(valEl);
+        container.appendChild(sliderWrapper);
+        container.appendChild(labelEl);
+
+        const render = () => {
+            const val = getVal();
+            slider.value = val;
+            valEl.textContent = `${val > 0 ? '+' : ''}${val.toFixed(1)}`;
+            
+            // Fill background dynamically for webkit slider
+            const pct = (val + 20) / 40 * 100;
+            slider.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.8) ${pct}%, rgba(255, 255, 255, 0.1) ${pct}%)`;
+        };
+
+        slider.addEventListener('input', (e) => {
+            const newVal = parseFloat(e.target.value);
+            onValChange(newVal);
+            render();
+            basicKnobs.forEach(k => k.render()); // Sync basic knobs
+            eqSettings.activePreset = 'Custom';
+            renderPresetOptions();
+        });
+
+        slider.addEventListener('change', () => {
+            saveSettings();
+        });
+
+        // Double click to reset
+        slider.addEventListener('dblclick', () => {
+            onValChange(0);
+            render();
+            basicKnobs.forEach(k => k.render());
+            eqSettings.activePreset = 'Custom';
+            renderPresetOptions();
+            saveSettings();
+        });
+
+        render();
+        return { container, render };
+    };
+
+    const sliderPreamp = createSlider(getMsg('preamp'), () => eqSettings.preamp, (val) => {
+        eqSettings.preamp = val;
+        applyEQSettingsToNodes();
+    });
+    proSliders.push(sliderPreamp);
+    proContent.appendChild(sliderPreamp.container);
+
+    const eqBandsGroup = document.createElement('div');
+    eqBandsGroup.className = 'yt-eq-pro-bands';
+
+    EQ_BANDS_LABELS.forEach((label, idx) => {
+        const sliderBand = createSlider(label, () => eqSettings.bands[idx], (val) => {
+            eqSettings.bands[idx] = val;
+            applyEQSettingsToNodes();
+        });
+        proSliders.push(sliderBand);
+        eqBandsGroup.appendChild(sliderBand.container);
+    });
+
+    proContent.appendChild(eqBandsGroup);
+
+    // --- Mode Toggle Logic ---
+    const switchMode = (mode) => {
+        eqSettings.mode = mode;
+        saveSettings();
+        if (mode === 'basic') {
+            btnBasic.classList.add('active');
+            btnPro.classList.remove('active');
+            basicContent.classList.add('active');
+            proContent.classList.remove('active');
+        } else {
+            btnPro.classList.add('active');
+            btnBasic.classList.remove('active');
+            proContent.classList.add('active');
+            basicContent.classList.remove('active');
+        }
+    };
+    btnBasic.onclick = () => switchMode('basic');
+    btnPro.onclick = () => switchMode('pro');
 
     // --- Footer ---
     const footer = document.createElement('div');
@@ -409,7 +701,7 @@ function createUI() {
 
     const limiterStatusSpan = document.createElement('span');
     limiterStatusSpan.textContent = getMsg('limiter');
-    limiterStatusSpan.style.color = '#888';
+    limiterStatusSpan.style.color = eqSettings.limiterEnabled ? '#e8e8e8' : '#888';
 
     const limiterSwitchLabel = document.createElement('label');
     limiterSwitchLabel.className = 'yt-eq-switch';
@@ -426,9 +718,6 @@ function createUI() {
         limiterStatusSpan.style.color = e.target.checked ? '#e8e8e8' : '#888';
     });
 
-    // Initial color
-    limiterStatusSpan.style.color = eqSettings.limiterEnabled ? '#e8e8e8' : '#888';
-
     limiterSwitchLabel.appendChild(limiterSwitchInput);
     limiterSwitchLabel.appendChild(limiterSwitchSpan);
 
@@ -444,8 +733,11 @@ function createUI() {
     resetBtn.onclick = () => {
         eqSettings.preamp = 0;
         eqSettings.bands = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        basicKnobs.forEach(k => k.render());
+        eqSettings.activePreset = 'Flat';
         applyEQSettingsToNodes();
+        basicKnobs.forEach(k => k.render());
+        proSliders.forEach(s => s.render());
+        renderPresetOptions();
         saveSettings();
     };
 
@@ -453,7 +745,9 @@ function createUI() {
     footer.appendChild(resetBtn);
 
     eqContainer.appendChild(header);
+    eqContainer.appendChild(presetContainer);
     eqContainer.appendChild(basicContent);
+    eqContainer.appendChild(proContent);
     eqContainer.appendChild(footer);
 
     const moviePlayer = document.getElementById('movie_player') || document.body;
@@ -468,6 +762,8 @@ function createUI() {
 
         const isClickInsideEQ = eqContainer.contains(e.target);
         const isClickOnToggle = eqToggleButton && eqToggleButton.contains(e.target);
+        
+        // Don't close if clicking a prompt (which blocks UI anyway)
 
         if (!isClickInsideEQ && !isClickOnToggle) {
             eqContainer.classList.remove('yt-eq-visible');
@@ -493,6 +789,9 @@ function injectEQButton() {
     const svgNS = "http://www.w3.org/2000/svg";
     const btnSvg = document.createElementNS(svgNS, "svg");
     btnSvg.setAttribute("viewBox", "0 0 24 24");
+    btnSvg.setAttribute("width", "100%");
+    btnSvg.setAttribute("height", "100%");
+    btnSvg.setAttribute("fill", "#ffffff");
 
     const btnPath = document.createElementNS(svgNS, "path");
     btnPath.setAttribute("d", "M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z");
@@ -537,10 +836,9 @@ function init() {
     let checkCount = 0;
     const checkPlayer = setInterval(() => {
         const video = document.querySelector('video');
-        const moviePlayer = document.getElementById('movie_player');
         const controls = document.querySelector('.ytp-right-controls');
 
-        if (video && moviePlayer && typeof moviePlayer.getPlayerResponse === 'function' && controls) {
+        if (video && controls) {
             clearInterval(checkPlayer);
 
             initWebAudio(video);

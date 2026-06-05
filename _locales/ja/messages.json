@@ -1,8 +1,33 @@
 {
     "extensionName": {
-        "message": "YouTube Equalizer & Normalizer Disabler"
+        "message": "YouTube 音量コントローラー & イコライザー"
     },
     "extensionDescription": {
-        "message": "YouTubeのノーマライザー（自動音量調整）を解除し、プロ仕様の3バンドイコライザー、リミッター、プリアンプを提供します。"
-    }
+        "message": "YouTubeの自動音量調整(ノーマライザー)を無効化し、3バンド/10バンドの本格的なイコライザーを提供する拡張機能。"
+    },
+    "title": { "message": "イコライザー" },
+    "preamp": { "message": "Pre" },
+    "low": { "message": "低音" },
+    "mid": { "message": "中域" },
+    "high": { "message": "トレブル" },
+    "normalizerOff": { "message": "ノーマライザー無効化" },
+    "normalizerOn": { "message": "ノーマライザー" },
+    "limiter": { "message": "音割れ防止 (Limiter)" },
+    "reset": { "message": "リセット" },
+    "tooltip": { "message": "イコライザー" },
+    "modeBasic": { "message": "3-Band" },
+    "modePro": { "message": "10-Band" },
+    "preset": { "message": "プリセット" },
+    "save": { "message": "保存" },
+    "customNamePrompt": { "message": "プリセット名を入力してください:" },
+    "presetFlat": { "message": "フラット" },
+    "presetBassBoost": { "message": "低音ブースト" },
+    "presetVocal": { "message": "ボーカル強調" },
+    "presetCinematic": { "message": "シネマティック" },
+    "presetPodcast": { "message": "ポッドキャスト" },
+    "customPresetsGroup": { "message": "カスタム" },
+    "defaultPresetsGroup": { "message": "デフォルト" },
+    "deleteTitle": { "message": "プリセットを削除" },
+    "deleteConfirm": { "message": "このプリセットを削除しますか？" },
+    "customUnsaved": { "message": "カスタム" }
 }

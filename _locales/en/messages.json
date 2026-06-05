@@ -4,5 +4,30 @@
     },
     "extensionDescription": {
         "message": "Professional 3-band rotary EQ with Brickwall Limiter, Preamp, and Automatic Volume Normalizer Disabler for YouTube."
-    }
+    },
+    "title": { "message": "Equalizer" },
+    "preamp": { "message": "Preamp" },
+    "low": { "message": "Low" },
+    "mid": { "message": "Mid" },
+    "high": { "message": "High" },
+    "normalizerOff": { "message": "Normalizer Disabled" },
+    "normalizerOn": { "message": "Normalizer" },
+    "limiter": { "message": "Limiter (Anti-clip)" },
+    "reset": { "message": "Reset" },
+    "tooltip": { "message": "Equalizer" },
+    "modeBasic": { "message": "3-Band" },
+    "modePro": { "message": "10-Band" },
+    "preset": { "message": "Preset" },
+    "save": { "message": "Save" },
+    "customNamePrompt": { "message": "Enter preset name:" },
+    "presetFlat": { "message": "Flat" },
+    "presetBassBoost": { "message": "Bass Boost" },
+    "presetVocal": { "message": "Vocal Clarity" },
+    "presetCinematic": { "message": "Cinematic" },
+    "presetPodcast": { "message": "Podcast" },
+    "customPresetsGroup": { "message": "Custom Presets" },
+    "defaultPresetsGroup": { "message": "Default Presets" },
+    "deleteTitle": { "message": "Delete Preset" },
+    "deleteConfirm": { "message": "Are you sure you want to delete this preset?" },
+    "customUnsaved": { "message": "Custom" }
 }
