@@ -262,21 +262,7 @@ function createUI() {
     const header = document.createElement('div');
     header.className = 'yt-eq-header';
 
-    const titleMain = document.createElement('div');
-    titleMain.className = 'yt-eq-title-main';
-
-    const svgNS = "http://www.w3.org/2000/svg";
-    const iconSvg = document.createElementNS(svgNS, "svg");
-    iconSvg.setAttribute("width", "18");
-    iconSvg.setAttribute("height", "18");
-    iconSvg.setAttribute("viewBox", "0 0 24 24");
-    iconSvg.setAttribute("fill", "#ffffff");
-    const iconPath = document.createElementNS(svgNS, "path");
-    iconPath.setAttribute("d", "M12 3v9.28a4.39 4.39 0 0 0-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z");
-    iconSvg.appendChild(iconPath);
-
-    // titleText removed as requested
-    titleMain.appendChild(iconSvg);
+    // titleMain, icon, and titleText removed as requested
 
     // --- Mode Toggle ---
     const modeToggle = document.createElement('div');
@@ -301,7 +287,7 @@ function createUI() {
         if (eqToggleButton) eqToggleButton.classList.remove('active');
     };
 
-    header.appendChild(titleMain);
+    // header.appendChild(titleMain); removed
     header.appendChild(modeToggle);
     header.appendChild(closeBtn);
 
@@ -459,9 +445,13 @@ function createUI() {
     setTimeout(() => updateDeleteBtnVisibility(eqSettings.activePreset), 100);
 
     // ====== BASIC MODE (3-Knob) ======
+    const basicWrapper = document.createElement('div');
+    basicWrapper.className = 'yt-eq-mode-wrapper';
+    if (eqSettings.mode === 'basic') basicWrapper.classList.add('active');
+
     const basicContent = document.createElement('div');
     basicContent.className = 'yt-eq-basic-controls yt-eq-mode-content';
-    if (eqSettings.mode === 'basic') basicContent.classList.add('active');
+    basicWrapper.appendChild(basicContent);
 
     const createRotaryKnob = (label, getVal, onValChange) => {
         const container = document.createElement('div');
@@ -577,9 +567,13 @@ function createUI() {
     basicContent.appendChild(knobHigh.container);
 
     // ====== PRO MODE (10-Slider) ======
+    const proWrapper = document.createElement('div');
+    proWrapper.className = 'yt-eq-mode-wrapper';
+    if (eqSettings.mode === 'pro') proWrapper.classList.add('active');
+
     const proContent = document.createElement('div');
     proContent.className = 'yt-eq-pro-controls yt-eq-mode-content';
-    if (eqSettings.mode === 'pro') proContent.classList.add('active');
+    proWrapper.appendChild(proContent);
 
     const createSlider = (label, getVal, onValChange) => {
         const container = document.createElement('div');
@@ -672,13 +666,13 @@ function createUI() {
         if (mode === 'basic') {
             btnBasic.classList.add('active');
             btnPro.classList.remove('active');
-            basicContent.classList.add('active');
-            proContent.classList.remove('active');
+            basicWrapper.classList.add('active');
+            proWrapper.classList.remove('active');
         } else {
             btnPro.classList.add('active');
             btnBasic.classList.remove('active');
-            proContent.classList.add('active');
-            basicContent.classList.remove('active');
+            proWrapper.classList.add('active');
+            basicWrapper.classList.remove('active');
         }
     };
     btnBasic.onclick = () => switchMode('basic');
@@ -769,8 +763,8 @@ function createUI() {
 
     eqContainer.appendChild(header);
     eqContainer.appendChild(presetContainer);
-    eqContainer.appendChild(basicContent);
-    eqContainer.appendChild(proContent);
+    eqContainer.appendChild(basicWrapper);
+    eqContainer.appendChild(proWrapper);
     eqContainer.appendChild(footer);
 
     const moviePlayer = document.getElementById('movie_player') || document.body;
