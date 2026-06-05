@@ -5,7 +5,7 @@
 ---
 
 <a id="english"></a>
-## 🇺🇸 English
+## English
 
 A professional-grade audio enhancement extension for YouTube. This tool allows users to bypass YouTube's automatic volume normalization and fine-tune their audio experience using a dual-mode equalizer (3-Band and 10-Band), a preamp, and a brickwall limiter.
 
@@ -47,7 +47,7 @@ MIT License
 ---
 
 <a id="日本語"></a>
-## 🇯🇵 日本語
+## 日本語
 
 YouTubeの自動音量調整（ノーマライザー）を解除し、プロ仕様のイコライザー（3バンド/10バンド）、プリアンプ、リミッターを提供するオーディオ拡張機能です。
 
