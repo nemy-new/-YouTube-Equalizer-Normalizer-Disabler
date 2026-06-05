@@ -3,7 +3,7 @@
         "message": "YouTube Equalizer & Normalizer Disabler"
     },
     "extensionDescription": {
-        "message": "Professional 3-band rotary EQ with Brickwall Limiter, Preamp, and Automatic Volume Normalizer Disabler for YouTube."
+        "message": "Disables YouTube's automatic volume normalization and provides a 3-band/10-band equalizer."
     },
     "title": { "message": "Equalizer" },
     "preamp": { "message": "Preamp" },

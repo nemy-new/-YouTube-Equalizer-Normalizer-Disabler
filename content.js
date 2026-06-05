@@ -95,10 +95,20 @@ function saveSettings() {
 function initWebAudio(video) {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Add listeners to resume AudioContext on user interaction
+        const resumeAudioContext = () => {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+            }
+        };
+        ['click', 'keydown', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, resumeAudioContext, { capture: true, passive: true });
+        });
     }
 
     if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
     }
 
     if (currentVideoElement !== video) {
@@ -185,12 +195,29 @@ function applyLimiterSettings() {
 }
 
 function applyNormalizerGain() {
-    const moviePlayer = document.getElementById('movie_player');
+    let moviePlayer = document.getElementById('movie_player');
+    
+    // Firefox support: access the underlying page object from Isolated World
+    if (moviePlayer && moviePlayer.wrappedJSObject) {
+        moviePlayer = moviePlayer.wrappedJSObject;
+    }
+
     if (!moviePlayer || typeof moviePlayer.getPlayerResponse !== 'function') return;
 
-    const playerResponse = moviePlayer.getPlayerResponse();
+    let globalWindow = window;
+    if (window.wrappedJSObject) {
+        globalWindow = window.wrappedJSObject;
+    }
+
+    let playerResponse;
+    try {
+        playerResponse = moviePlayer.getPlayerResponse();
+    } catch (e) {
+        console.warn('[YT EQ] Failed to read playerResponse', e);
+    }
+
     const config = playerResponse?.playerConfig?.audioConfig ||
-        window.ytInitialPlayerResponse?.playerConfig?.audioConfig;
+        globalWindow.ytInitialPlayerResponse?.playerConfig?.audioConfig;
 
     const loudnessDb = config?.loudnessDb || 0;
 
