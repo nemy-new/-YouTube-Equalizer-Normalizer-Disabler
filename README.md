@@ -34,11 +34,23 @@ YouTubeの自動音量調整（ノーマライザー）を解除し、プロ仕�
 ### Chrome Web Store
 https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_source=item-share-cb
 
-### Developer Mode (Local) / デベロッパーモード
-1. Clone this repository or download the ZIP. / このリポジトリをダウンロードします。
-2. Open Chrome and navigate to `chrome://extensions/`. / Chromeで `chrome://extensions/` を開きます。
-3. Enable **Developer mode** (top right). / 右上の「デベロッパー モード」をオンにします。
-4. Click **Load unpacked** and select this directory. / 「パッケージ化されていない拡張機能を読み込む」を選択し、このディレクトリを指定します。
+### Manual Installation (For Edge, Firefox, and Chrome local) / 手動インストール（Edge, Firefox, ローカル用）
+
+First, download this repository as a ZIP file and extract it.
+まず、このリポジトリをZIP形式でダウンロードし、解凍しておきます。
+
+#### 🔵 Google Chrome & Microsoft Edge
+1. Open the extensions page. / 拡張機能ページを開きます。
+   - Chrome: `chrome://extensions/`
+   - Edge: `edge://extensions/`
+2. Enable **Developer mode**. / 「デベロッパー モード」をオンにします。
+3. Click **Load unpacked** and select the extracted directory. / 「パッケージ化されていない拡張機能を読み込む」を選択し、解凍したフォルダを指定します。
+
+#### 🦊 Mozilla Firefox
+1. Open the debugging page: `about:debugging#/runtime/this-firefox` / デバッグページ `about:debugging#/runtime/this-firefox` を開きます。
+2. Click **Load Temporary Add-on...** / 「一時的なアドオンを読み込む...」をクリックします。
+3. Select the `manifest.json` file inside the extracted directory. / 解凍したフォルダの中にある `manifest.json` を選択します。
+*(Note: Firefox temporary add-ons are removed when the browser restarts. / 注意: Firefoxの一時的なアドオンは、ブラウザを再起動すると解除されます。)*
 
 ## License | ライセンス
 MIT License
