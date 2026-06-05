@@ -39,12 +39,13 @@
 /* EQ Header */
 .yt-eq-header {
     display: flex !important;
-    justify-content: space-between !important;
+    justify-content: flex-end !important;
     align-items: center !important;
     background-color: transparent !important;
     border-bottom: none !important;
     padding: 0 16px !important;
     height: 44px !important;
+    gap: 16px !important;
 }
 
 .yt-eq-title-main {
@@ -436,7 +437,7 @@ input:checked+.yt-eq-slider-toggle:before {
 .yt-eq-pro-controls {
     display: flex !important;
     flex-direction: row !important;
-    padding: 8px 16px 8px !important;
+    padding: 0px 16px 8px !important;
     gap: 16px !important;
 }
 
