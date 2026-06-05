@@ -88,64 +88,53 @@
 /* Knob Sizing */
 .yt-eq-knob-wrapper {
     position: relative !important;
-    width: 84px !important;
-    height: 84px !important;
+    width: 72px !important;
+    height: 72px !important;
     cursor: ns-resize !important;
+    margin: 8px 0 !important;
 }
 
 /* Background dark ring */
 .yt-eq-knob-bg {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    inset: 0 !important;
     border-radius: 50% !important;
-    background: conic-gradient(from 225deg, rgba(255, 255, 255, 0.08) 270deg, transparent 270deg) !important;
+    background: conic-gradient(from 225deg, rgba(255, 255, 255, 0.1) 270deg, transparent 270deg) !important;
+    mask-image: radial-gradient(transparent 70%, black 71%) !important;
+    -webkit-mask-image: radial-gradient(transparent 70%, black 71%) !important;
 }
 
 /* Foreground value ring (The Meter) */
 .yt-eq-knob-fg {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    inset: 0 !important;
     border-radius: 50% !important;
-    background: conic-gradient(from 225deg, transparent 0deg, transparent 270deg) !important;
     /* Set via JS */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4) !important;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) !important;
+    mask-image: radial-gradient(transparent 70%, black 71%) !important;
+    -webkit-mask-image: radial-gradient(transparent 70%, black 71%) !important;
+    filter: drop-shadow(0 0 3px rgba(255, 183, 77, 0.4)) !important;
 }
 
 /* Cutout center (The Dial) */
 .yt-eq-knob-center {
     position: absolute !important;
-    top: 6px !important;
-    /* 6px thickness for the meter ring */
-    left: 6px !important;
-    width: 72px !important;
-    height: 72px !important;
+    inset: 15px !important; /* Creates a gap between track and dial */
     border-radius: 50% !important;
-    background-color: #1f1f1f !important;
-    /* solid dark gray dial */
+    background-color: #242424 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
     z-index: 2 !important;
 }
 
 /* The indicator line inside the center */
 .yt-eq-knob-indicator {
     position: absolute !important;
-    width: 3px !important;
-    height: 12px !important;
-    background-color: #ffffff !important;
-    top: 6px !important;
-    border-radius: 1.5px !important;
-    transform-origin: 50% 30px !important;
-    /* Half of 72px minus top offset */
+    width: 4px !important;
+    height: 10px !important;
+    background-color: #ffb74d !important;
+    top: 4px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    border-radius: 2px !important;
 }
 
 .yt-eq-knob-value {
