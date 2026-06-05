@@ -12,31 +12,85 @@ const EQ_BANDS = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const EQ_BANDS_LABELS = ['32Hz', '64Hz', '125Hz', '250Hz', '500Hz', '1kHz', '2kHz', '4kHz', '8kHz', '16kHz'];
 
 const I18N_FALLBACK = {
-    ja: {
-        title: 'イコライザー', preamp: 'Pre', low: '低音', mid: '中域', high: 'トレブル',
-        normalizerOff: 'ノーマライザー無効化', normalizerOn: 'ノーマライザー', limiter: '音割れ防止 (Limiter)',
-        reset: 'リセット', tooltip: 'イコライザー', modeBasic: '3-Band', modePro: '10-Band',
-        preset: 'プリセット', save: '保存', customNamePrompt: 'プリセット名を入力してください:',
-        presetFlat: 'フラット', presetBassBoost: '低音ブースト', presetVocal: 'ボーカル強調',
-        presetCinematic: 'シネマティック', presetPodcast: 'ポッドキャスト',
-        customPresetsGroup: 'カスタム', defaultPresetsGroup: 'デフォルト',
-        deleteTitle: 'プリセットを削除', deleteConfirm: 'このプリセットを削除しますか？',
-        customUnsaved: 'カスタム'
-    },
     en: {
         title: 'Equalizer', preamp: 'Preamp', low: 'Low', mid: 'Mid', high: 'High',
-        normalizerOff: 'Normalizer Disabled', normalizerOn: 'Normalizer', limiter: 'Limiter (Anti-clip)',
-        reset: 'Reset', tooltip: 'Equalizer', modeBasic: '3-Band', modePro: '10-Band',
+        normalizerOff: 'Normalizer Disabled', normalizerOn: 'Normalizer',
+        limiter: 'Limiter (Anti-clip)', reset: 'Reset', tooltip: 'Equalizer',
+        modeBasic: '3-Band', modePro: '10-Band',
         preset: 'Preset', save: 'Save', customNamePrompt: 'Enter preset name:',
         presetFlat: 'Flat', presetBassBoost: 'Bass Boost', presetVocal: 'Vocal Clarity',
         presetCinematic: 'Cinematic', presetPodcast: 'Podcast',
         customPresetsGroup: 'Custom Presets', defaultPresetsGroup: 'Default Presets',
         deleteTitle: 'Delete Preset', deleteConfirm: 'Are you sure you want to delete this preset?',
         customUnsaved: 'Custom (Unsaved)'
+    },
+    ja: {
+        title: 'イコライザー', preamp: 'プリアンプ', low: '低音', mid: '中音', high: '高音',
+        normalizerOff: 'ノーマライザー無効', normalizerOn: 'ノーマライザー',
+        limiter: '音割れ防止 (Limiter)', reset: 'リセット', tooltip: 'イコライザー',
+        modeBasic: '3-Band', modePro: '10-Band',
+        preset: 'プリセット', save: '保存', customNamePrompt: 'プリセット名を入力してください:',
+        presetFlat: 'フラット', presetBassBoost: '低音ブースト', presetVocal: 'ボーカル強調',
+        presetCinematic: 'シネマティック', presetPodcast: 'ポッドキャスト',
+        customPresetsGroup: 'カスタムプリセット', defaultPresetsGroup: 'デフォルトプリセット',
+        deleteTitle: 'プリセットの削除', deleteConfirm: 'このプリセットを削除してもよろしいですか？',
+        customUnsaved: 'カスタム'
+    },
+    ko: {
+        title: '이퀄라이저', preamp: '프리앰프', low: '저음', mid: '중음', high: '고음',
+        normalizerOff: '노멀라이저 비활성화됨', normalizerOn: '노멀라이저',
+        limiter: '클리핑 방지 (Limiter)', reset: '초기화', tooltip: '이퀄라이저',
+        modeBasic: '3-Band', modePro: '10-Band',
+        preset: '프리셋', save: '저장', customNamePrompt: '프리셋 이름을 입력하세요:',
+        presetFlat: '플랫', presetBassBoost: '베이스 부스트', presetVocal: '보컬 강조',
+        presetCinematic: '시네마틱', presetPodcast: '팟캐스트',
+        customPresetsGroup: '사용자 지정 프리셋', defaultPresetsGroup: '기본 프리셋',
+        deleteTitle: '프리셋 삭제', deleteConfirm: '이 프리셋을 삭제하시겠습니까?',
+        customUnsaved: '사용자 지정'
+    },
+    ru: {
+        title: 'Эквалайзер', preamp: 'Преамп', low: 'Низкие', mid: 'Средние', high: 'Высокие',
+        normalizerOff: 'Нормализатор Отключен', normalizerOn: 'Нормализатор',
+        limiter: 'Лимитер (Антиклип)', reset: 'Сброс', tooltip: 'Эквалайзер',
+        modeBasic: '3-Band', modePro: '10-Band',
+        preset: 'Пресет', save: 'Сохранить', customNamePrompt: 'Введите имя пресета:',
+        presetFlat: 'Плоский', presetBassBoost: 'Усиление басов', presetVocal: 'Четкость вокала',
+        presetCinematic: 'Кинематографичный', presetPodcast: 'Подкаст',
+        customPresetsGroup: 'Свои пресеты', defaultPresetsGroup: 'Стандартные',
+        deleteTitle: 'Удалить Пресет', deleteConfirm: 'Вы уверены, что хотите удалить этот пресет?',
+        customUnsaved: 'Свой'
+    },
+    zh: {
+        title: '均衡器', preamp: '前置放大器', low: '低音', mid: '中音', high: '高音',
+        normalizerOff: '音量标准化已禁用', normalizerOn: '音量标准化',
+        limiter: '防破音 (Limiter)', reset: '重置', tooltip: '均衡器',
+        modeBasic: '3-Band', modePro: '10-Band',
+        preset: '预设', save: '保存', customNamePrompt: '请输入预设名称：',
+        presetFlat: '平坦', presetBassBoost: '低音增强', presetVocal: '人声增强',
+        presetCinematic: '影院', presetPodcast: '播客',
+        customPresetsGroup: '自定义预设', defaultPresetsGroup: '默认预设',
+        deleteTitle: '删除预设', deleteConfirm: '您确定要删除此预设吗？',
+        customUnsaved: '自定义'
     }
 };
 
 const getMsg = (key) => {
+    // 1. Try to detect YouTube's actual language first
+    const ytLang = document.documentElement.lang || '';
+    const langHeader = (ytLang || navigator.language || '').toLowerCase();
+    
+    let targetLang = null;
+    if (langHeader.startsWith('ja')) targetLang = 'ja';
+    else if (langHeader.startsWith('ko')) targetLang = 'ko';
+    else if (langHeader.startsWith('ru')) targetLang = 'ru';
+    else if (langHeader.startsWith('zh')) targetLang = 'zh';
+    
+    // 2. If it matches one of our fully supported fallback languages, use it directly
+    if (targetLang && I18N_FALLBACK[targetLang] && I18N_FALLBACK[targetLang][key]) {
+        return I18N_FALLBACK[targetLang][key];
+    }
+
+    // 3. Try native extension i18n
     try {
         const msg = chrome.i18n.getMessage(key);
         if (msg) return msg;
