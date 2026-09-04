@@ -41,6 +41,9 @@ First, download this repository as a ZIP file and extract it.
 3. Select the `manifest.json` file inside the extracted directory.
 *(Note: Firefox temporary add-ons are removed when the browser restarts.)*
 
+### Disclaimer
+*The developer assumes no responsibility for any damage to audio hardware, hearing, or any other damages resulting from the use of this extension. Please use at your own risk and avoid excessive volume levels.
+
 ### License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -82,6 +85,9 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 2. 「一時的なアドオンを読み込む...」をクリックします。
 3. 解凍したフォルダの中にある `manifest.json` を選択します。
 *(注意: Firefoxの一時的なアドオンは、ブラウザを再起動すると解除されます。)*
+
+### 免責事項
+※本拡張機能の利用によって生じたオーディオ機器の故障、破損、聴覚への影響、その他いかなる損害についても、開発者は一切の責任を負いません。音量の上げすぎには十分ご注意の上、自己責任でご使用ください。
 
 ### ライセンス
 このプロジェクトは MIT License のもとで公開されています。詳細は [LICENSE](LICENSE) ファイルをご覧ください。
