@@ -1,12 +1,12 @@
 /* Equalizer Container */
 .yt-eq-container {
-    position: absolute;
-    bottom: 60px;
-    /* Above the video control bar */
-    right: 20px;
+    position: absolute !important;
+    bottom: 62px !important;
+    /* Elevated above video control bar and seekbar/scrubber */
+    right: 20px !important;
     width: max-content !important;
     min-width: 540px !important;
-    background-color: rgba(0, 0, 0, 0.75) !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-radius: 12px !important;
@@ -14,16 +14,38 @@
     font-family: 'Roboto', 'Arial', sans-serif !important;
     color: #f1f1f1 !important;
     /* YouTube primary text */
-    z-index: 9999;
-    display: none;
-    flex-direction: column;
+    z-index: 99999 !important;
+    display: none !important;
+    flex-direction: column !important;
     border: none !important;
-    user-select: none;
+    user-select: none !important;
     overflow: hidden !important;
 }
 
 .yt-eq-container.yt-eq-visible {
     display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Prevent controls and seekbar from auto-hiding when EQ is open */
+.html5-video-player.yt-eq-active .ytp-chrome-bottom,
+.html5-video-player:has(#yt-eq-container.yt-eq-visible) .ytp-chrome-bottom {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.html5-video-player.yt-eq-active .ytp-gradient-bottom,
+.html5-video-player:has(#yt-eq-container.yt-eq-visible) .ytp-gradient-bottom {
+    opacity: 1 !important;
+    display: block !important;
+}
+
+.html5-video-player.yt-eq-active,
+.html5-video-player:has(#yt-eq-container.yt-eq-visible) {
+    cursor: default !important;
 }
 
 /* Add a transition to the container itself to smooth out any sub-pixel layout shifts */
@@ -267,7 +289,7 @@
     background-color: #909090 !important;
     transition: .2s !important;
     border-radius: 50% !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 input:checked+.yt-eq-slider-toggle {
@@ -288,6 +310,7 @@ input:checked+.yt-eq-slider-toggle:before {
     border-radius: 18px !important;
     padding: 2px !important;
 }
+
 .yt-eq-mode-btn {
     background: transparent !important;
     border: none !important;
@@ -299,10 +322,12 @@ input:checked+.yt-eq-slider-toggle:before {
     transition: all 0.3s ease-in-out !important;
     opacity: 0.6 !important;
 }
+
 .yt-eq-mode-btn.active {
     background: rgba(255, 255, 255, 0.2) !important;
     opacity: 1 !important;
 }
+
 .yt-eq-mode-btn:hover {
     opacity: 0.9 !important;
 }
@@ -314,11 +339,13 @@ input:checked+.yt-eq-slider-toggle:before {
     padding: 8px 16px 0 !important;
     gap: 12px !important;
 }
+
 .yt-eq-preset-label {
     font-size: 13px !important;
     color: #f1f1f1 !important;
     opacity: 0.8 !important;
 }
+
 .yt-eq-preset-select-wrapper {
     flex: 1 !important;
     position: relative !important;
@@ -366,10 +393,13 @@ input:checked+.yt-eq-slider-toggle:before {
 .yt-eq-preset-delete:hover svg {
     opacity: 1 !important;
 }
-.yt-eq-preset-select option, .yt-eq-preset-select optgroup {
+
+.yt-eq-preset-select option,
+.yt-eq-preset-select optgroup {
     background: #212121 !important;
     color: #f1f1f1 !important;
 }
+
 .yt-eq-preset-save {
     background: rgba(255, 255, 255, 0.1) !important;
     border: none !important;
@@ -380,7 +410,9 @@ input:checked+.yt-eq-slider-toggle:before {
     cursor: pointer !important;
     transition: background 0.2s !important;
 }
-.yt-eq-preset-save:hover, .yt-eq-preset-select:hover {
+
+.yt-eq-preset-save:hover,
+.yt-eq-preset-select:hover {
     background: rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -405,7 +437,7 @@ input:checked+.yt-eq-slider-toggle:before {
     transition: opacity 0.25s ease-in-out, visibility 0.25s !important;
 }
 
-.yt-eq-mode-wrapper.active > .yt-eq-mode-content {
+.yt-eq-mode-wrapper.active>.yt-eq-mode-content {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
@@ -436,18 +468,21 @@ input:checked+.yt-eq-slider-toggle:before {
     border-left: none !important;
     padding-left: 16px !important;
 }
+
 .yt-eq-slider-col {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     gap: 12px !important;
 }
+
 .yt-eq-slider-label {
     font-size: 11px !important;
     color: #ccc !important;
     text-align: center !important;
     white-space: nowrap !important;
 }
+
 .yt-eq-slider-val {
     font-size: 11px !important;
     color: #fff !important;
@@ -455,11 +490,13 @@ input:checked+.yt-eq-slider-toggle:before {
     text-align: center !important;
     font-variant-numeric: tabular-nums !important;
 }
+
 .yt-eq-vertical-slider-wrapper {
     position: relative !important;
     height: 120px !important;
     width: 24px !important;
 }
+
 .yt-eq-vertical-slider {
     position: absolute !important;
     -webkit-appearance: none !important;
@@ -473,6 +510,7 @@ input:checked+.yt-eq-slider-toggle:before {
     transform: translate(-50%, -50%) rotate(-90deg) !important;
     margin: 0 !important;
 }
+
 .yt-eq-vertical-slider::-webkit-slider-thumb {
     -webkit-appearance: none !important;
     width: 16px !important;
@@ -480,5 +518,5 @@ input:checked+.yt-eq-slider-toggle:before {
     border-radius: 50% !important;
     background: #fff !important;
     cursor: pointer !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }

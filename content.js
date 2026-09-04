@@ -1,5 +1,20 @@
+(() => {
+'use strict';
+
+const YT_EQ_VERSION = '1.2.3';
+
+// Prevent duplicate execution of the exact same version instance
+if (window.__YT_EQ_RUNNING_VERSION__ === YT_EQ_VERSION) {
+    if (typeof window.__YT_EQ_SYNC__ === 'function') {
+        window.__YT_EQ_SYNC__();
+    }
+    return;
+}
+window.__YT_EQ_RUNNING_VERSION__ = YT_EQ_VERSION;
+window.__YT_EQ_INITIALIZED__ = true;
+
 // Audio Context state
-let audioCtx = null;
+let ytEqAudioCtx = window.__YT_EQ_AUDIO_CTX__ || null;
 let sourceNode = null;
 let preampNode = null;
 let normalizerNode = null;
@@ -92,8 +107,10 @@ const getMsg = (key) => {
 
     // 3. Try native extension i18n
     try {
-        const msg = chrome.i18n.getMessage(key);
-        if (msg) return msg;
+        if (typeof chrome !== 'undefined' && chrome?.i18n?.getMessage) {
+            const msg = chrome.i18n.getMessage(key);
+            if (msg) return msg;
+        }
     } catch (e) {}
     const lang = navigator.language.startsWith('ja') ? 'ja' : 'en';
     return I18N_FALLBACK[lang][key] || key;
@@ -147,13 +164,18 @@ function saveSettings() {
 }
 
 function initWebAudio(video) {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (!video) return;
+
+    if (!ytEqAudioCtx || ytEqAudioCtx.state === 'closed') {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        ytEqAudioCtx = new AudioContextClass();
+        window.__YT_EQ_AUDIO_CTX__ = ytEqAudioCtx;
         
         // Add listeners to resume AudioContext on user interaction
         const resumeAudioContext = () => {
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(() => {});
+            if (ytEqAudioCtx && ytEqAudioCtx.state === 'suspended') {
+                ytEqAudioCtx.resume().catch(() => {});
             }
         };
         ['click', 'keydown', 'touchstart'].forEach(evt => {
@@ -161,24 +183,32 @@ function initWebAudio(video) {
         });
     }
 
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(() => {});
+    if (ytEqAudioCtx.state === 'suspended') {
+        ytEqAudioCtx.resume().catch(() => {});
     }
 
     if (currentVideoElement !== video) {
         if (sourceNode) {
-            sourceNode.disconnect();
+            try {
+                sourceNode.disconnect();
+            } catch (e) {}
         }
 
         try {
-            sourceNode = audioCtx.createMediaElementSource(video);
+            if (video.__ytEqSourceNode && video.__ytEqAudioCtx === ytEqAudioCtx) {
+                sourceNode = video.__ytEqSourceNode;
+            } else {
+                sourceNode = ytEqAudioCtx.createMediaElementSource(video);
+                video.__ytEqSourceNode = sourceNode;
+                video.__ytEqAudioCtx = ytEqAudioCtx;
+            }
 
             // Create Nodes
-            preampNode = audioCtx.createGain();
-            normalizerNode = audioCtx.createGain();
+            preampNode = ytEqAudioCtx.createGain();
+            normalizerNode = ytEqAudioCtx.createGain();
 
             // Create Brickwall Limiter
-            limiterNode = audioCtx.createDynamicsCompressor();
+            limiterNode = ytEqAudioCtx.createDynamicsCompressor();
             limiterNode.threshold.value = -0.1; // Catch peaks just under 0dB
             limiterNode.knee.value = 0.0;       // Hard knee
             limiterNode.ratio.value = 20.0;     // High ratio for brickwall
@@ -187,7 +217,7 @@ function initWebAudio(video) {
 
             // Create 10-band EQ
             filterNodes = EQ_BANDS.map(freq => {
-                const filter = audioCtx.createBiquadFilter();
+                const filter = ytEqAudioCtx.createBiquadFilter();
                 filter.type = 'peaking';
                 filter.frequency.value = freq;
                 filter.Q.value = 1.41; // typical Q value
@@ -205,7 +235,7 @@ function initWebAudio(video) {
 
             lastNode.connect(normalizerNode);
             normalizerNode.connect(limiterNode);
-            limiterNode.connect(audioCtx.destination);
+            limiterNode.connect(ytEqAudioCtx.destination);
 
             currentVideoElement = video;
             applyEQSettingsToNodes();
@@ -266,9 +296,7 @@ function applyNormalizerGain() {
     let playerResponse;
     try {
         playerResponse = moviePlayer.getPlayerResponse();
-    } catch (e) {
-        console.warn('[YT EQ] Failed to read playerResponse', e);
-    }
+    } catch (e) {}
 
     const config = playerResponse?.playerConfig?.audioConfig ||
         globalWindow.ytInitialPlayerResponse?.playerConfig?.audioConfig;
@@ -292,6 +320,108 @@ function applyNormalizerGain() {
 let eqContainer = null;
 let eqToggleButton = null;
 let normalizerStatusSpan = null;
+let autohideObserver = null;
+
+function setupAutohidePrevention() {
+    const moviePlayer = getMoviePlayer();
+    if (!moviePlayer || autohideObserver) return;
+
+    autohideObserver = new MutationObserver(() => {
+        const isEQOpen = eqContainer && eqContainer.classList.contains('yt-eq-visible');
+        if (!isEQOpen) return;
+
+        if (moviePlayer.classList.contains('ytp-autohide')) {
+            moviePlayer.classList.remove('ytp-autohide');
+        }
+
+        // Mutual exclusion: if YouTube settings menu or active popup opens, close EQ
+        const settingsMenu = document.querySelector('.ytp-settings-menu');
+        if (settingsMenu && settingsMenu.style.display !== 'none' && settingsMenu.offsetHeight > 0) {
+            setEQVisible(false);
+        }
+    });
+
+    autohideObserver.observe(moviePlayer, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'style', 'aria-expanded']
+    });
+}
+
+function getMoviePlayer() {
+    return document.getElementById('movie_player') || 
+           document.querySelector('.html5-video-player') || 
+           document.querySelector('#player-theater-container') || 
+           document.querySelector('#player');
+}
+
+function ensureUIAttached() {
+    const moviePlayer = getMoviePlayer();
+    if (!eqContainer) {
+        createUI();
+    }
+    if (eqContainer && moviePlayer && eqContainer.parentElement !== moviePlayer) {
+        moviePlayer.appendChild(eqContainer);
+    }
+    return !!eqContainer;
+}
+
+function closeYouTubePopups() {
+    try {
+        const settingsBtn = document.querySelector('.ytp-settings-button');
+        if (settingsBtn && settingsBtn.getAttribute('aria-expanded') === 'true') {
+            settingsBtn.click();
+        }
+
+        const popups = document.querySelectorAll('.ytp-popup, .ytp-settings-menu, .ytp-contextmenu');
+        popups.forEach(popup => {
+            if (popup !== eqContainer && !popup.contains(eqContainer) && !eqContainer.contains(popup)) {
+                if (popup.style.display !== 'none') {
+                    popup.style.display = 'none';
+                }
+            }
+        });
+    } catch (e) {}
+}
+
+function setEQVisible(visible) {
+    ensureUIAttached();
+    if (!eqContainer) return;
+
+    const moviePlayer = getMoviePlayer();
+
+    if (visible) {
+        // Close any open settings or YouTube popup menus before opening EQ
+        closeYouTubePopups();
+
+        try {
+            if (!ytEqAudioCtx) {
+                const video = document.querySelector('video');
+                if (video) initWebAudio(video);
+            }
+        } catch (e) {}
+
+        eqContainer.classList.add('yt-eq-visible');
+        if (eqToggleButton) eqToggleButton.classList.add('active');
+
+        if (moviePlayer) {
+            moviePlayer.classList.add('yt-eq-active');
+            moviePlayer.classList.remove('ytp-autohide');
+            if (typeof moviePlayer.wakeUpControls === 'function') {
+                moviePlayer.wakeUpControls();
+            }
+        }
+        setupAutohidePrevention();
+    } else {
+        eqContainer.classList.remove('yt-eq-visible');
+        if (eqToggleButton) eqToggleButton.classList.remove('active');
+
+        if (moviePlayer) {
+            moviePlayer.classList.remove('yt-eq-active');
+        }
+    }
+}
 
 function updateNormalizerUI(loudnessDb) {
     if (normalizerStatusSpan) {
@@ -306,11 +436,19 @@ function updateNormalizerUI(loudnessDb) {
 }
 
 function createUI() {
-    if (document.getElementById('yt-eq-container')) return;
+    const moviePlayer = document.getElementById('movie_player') || document.querySelector('.html5-video-player') || document.body;
+    let existingContainer = document.getElementById('yt-eq-container');
+    if (existingContainer) {
+        if (moviePlayer && moviePlayer.contains(existingContainer)) {
+            eqContainer = existingContainer;
+            return;
+        }
+        try { existingContainer.remove(); } catch (e) {}
+    }
 
     eqContainer = document.createElement('div');
     eqContainer.id = 'yt-eq-container';
-    eqContainer.className = 'yt-eq-container yt-eq-visible';
+    eqContainer.className = 'yt-eq-container';
 
     // --- Header ---
     const header = document.createElement('div');
@@ -337,8 +475,7 @@ function createUI() {
     closeBtn.className = 'yt-eq-close';
     closeBtn.textContent = '\u2715';
     closeBtn.onclick = () => {
-        eqContainer.classList.remove('yt-eq-visible');
-        if (eqToggleButton) eqToggleButton.classList.remove('active');
+        setEQVisible(false);
     };
 
     // header.appendChild(titleMain); removed
@@ -451,13 +588,18 @@ function createUI() {
     presetDeleteBtn.title = getMsg('deleteTitle');
     presetDeleteBtn.style.display = 'none';
     presetDeleteBtn.onclick = () => {
-        if (confirm(getMsg('deleteConfirm'))) {
-            eqSettings.customPresets = eqSettings.customPresets.filter(p => p.name !== eqSettings.activePreset);
-            eqSettings.activePreset = 'Flat';
-            saveSettings();
-            renderPresetOptions();
-            applyPreset(DEFAULT_PRESETS.find(p => p.id === 'Flat'));
-            updateDeleteBtnVisibility('Flat');
+        isModalDialogOpen = true;
+        try {
+            if (confirm(getMsg('deleteConfirm'))) {
+                eqSettings.customPresets = eqSettings.customPresets.filter(p => p.name !== eqSettings.activePreset);
+                eqSettings.activePreset = 'Flat';
+                saveSettings();
+                renderPresetOptions();
+                applyPreset(DEFAULT_PRESETS.find(p => p.id === 'Flat'));
+                updateDeleteBtnVisibility('Flat');
+            }
+        } finally {
+            setTimeout(() => { isModalDialogOpen = false; }, 200);
         }
     };
 
@@ -465,24 +607,29 @@ function createUI() {
     presetSaveBtn.className = 'yt-eq-preset-save';
     presetSaveBtn.textContent = getMsg('save');
     presetSaveBtn.onclick = () => {
-        const name = window.prompt(getMsg('customNamePrompt'), 'My Preset');
-        if (name && name.trim()) {
-            const newPreset = {
-                name: name.trim(),
-                bands: [...eqSettings.bands],
-                preamp: eqSettings.preamp
-            };
-            if (!eqSettings.customPresets) eqSettings.customPresets = [];
-            const existingIdx = eqSettings.customPresets.findIndex(p => p.name === newPreset.name);
-            if (existingIdx >= 0) {
-                eqSettings.customPresets[existingIdx] = newPreset;
-            } else {
-                eqSettings.customPresets.push(newPreset);
+        isModalDialogOpen = true;
+        try {
+            const name = window.prompt(getMsg('customNamePrompt'), 'My Preset');
+            if (name && name.trim()) {
+                const newPreset = {
+                    name: name.trim(),
+                    bands: [...eqSettings.bands],
+                    preamp: eqSettings.preamp
+                };
+                if (!eqSettings.customPresets) eqSettings.customPresets = [];
+                const existingIdx = eqSettings.customPresets.findIndex(p => p.name === newPreset.name);
+                if (existingIdx >= 0) {
+                    eqSettings.customPresets[existingIdx] = newPreset;
+                } else {
+                    eqSettings.customPresets.push(newPreset);
+                }
+                eqSettings.activePreset = newPreset.name;
+                saveSettings();
+                renderPresetOptions();
+                updateDeleteBtnVisibility(newPreset.name);
             }
-            eqSettings.activePreset = newPreset.name;
-            saveSettings();
-            renderPresetOptions();
-            updateDeleteBtnVisibility(newPreset.name);
+        } finally {
+            setTimeout(() => { isModalDialogOpen = false; }, 200);
         }
     };
 
@@ -522,7 +669,7 @@ function createUI() {
         const svgNS = "http://www.w3.org/2000/svg";
         const svg = document.createElementNS(svgNS, "svg");
         svg.setAttribute("viewBox", "0 0 84 84");
-        svg.className = 'yt-eq-knob-svg';
+        svg.setAttribute("class", "yt-eq-knob-svg");
 
         const r = 38; 
         const c = 42;
@@ -852,41 +999,84 @@ function createUI() {
     eqContainer.appendChild(proWrapper);
     eqContainer.appendChild(footer);
 
-    const moviePlayer = document.getElementById('movie_player') || document.body;
     moviePlayer.appendChild(eqContainer);
 
     // Setup initial state visually
     eqContainer.classList.remove('yt-eq-visible');
 
-    // Click outside to close
-    document.addEventListener('click', (e) => {
-        if (!eqContainer.classList.contains('yt-eq-visible')) return;
-
-        const isClickInsideEQ = eqContainer.contains(e.target);
-        const isClickOnToggle = eqToggleButton && eqToggleButton.contains(e.target);
-        
-        // Don't close if clicking a prompt (which blocks UI anyway)
-
-        if (!isClickInsideEQ && !isClickOnToggle) {
-            eqContainer.classList.remove('yt-eq-visible');
-            if (eqToggleButton) eqToggleButton.classList.remove('active');
-        }
-    });
+    // Click outside to close (attached once globally)
+    setupClickOutside();
 
     // update status right away if loudness is already known
     applyNormalizerGain();
 }
 
-function injectEQButton() {
-    if (document.getElementById('ytp-eq-button')) return;
+let isModalDialogOpen = false;
+let clickOutsideAttached = false;
+function setupClickOutside() {
+    if (clickOutsideAttached) return;
+    clickOutsideAttached = true;
 
+    // Close when clicking inside the page but outside the EQ panel
+    // Capture phase ensures clicking other YouTube controls (settings, player, captions) closes EQ first
+    document.addEventListener('click', (e) => {
+        if (!eqContainer || !eqContainer.classList.contains('yt-eq-visible')) return;
+
+        const isClickInsideEQ = eqContainer.contains(e.target);
+        const toggleBtn = document.getElementById('ytp-eq-button');
+        const isClickOnToggle = toggleBtn && (toggleBtn === e.target || toggleBtn.contains(e.target));
+
+        // Don't close if clicking inside container or on toggle button
+        if (!isClickInsideEQ && !isClickOnToggle) {
+            setEQVisible(false);
+        }
+    }, true);
+
+    // Close when clicking outside the browser window (window loses focus) or switching apps/windows
+    window.addEventListener('blur', () => {
+        if (isModalDialogOpen) return;
+        if (eqContainer && eqContainer.classList.contains('yt-eq-visible')) {
+            setEQVisible(false);
+        }
+    });
+
+    // Close when switching tabs
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && eqContainer && eqContainer.classList.contains('yt-eq-visible')) {
+            setEQVisible(false);
+        }
+    });
+}
+
+function injectEQButton() {
     const rightControls = document.querySelector('.ytp-right-controls');
     if (!rightControls) return;
+
+    const toggleHandler = (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        ensureUIAttached();
+        const isVisible = eqContainer && eqContainer.classList.contains('yt-eq-visible');
+        setEQVisible(!isVisible);
+    };
+
+    const existingBtn = document.getElementById('ytp-eq-button');
+    if (existingBtn) {
+        if (rightControls.contains(existingBtn)) {
+            eqToggleButton = existingBtn;
+            eqToggleButton.onclick = toggleHandler;
+            return;
+        }
+        try { existingBtn.remove(); } catch (e) {}
+    }
 
     eqToggleButton = document.createElement('button');
     eqToggleButton.id = 'ytp-eq-button';
     eqToggleButton.className = 'ytp-eq-button ytp-button';
     eqToggleButton.setAttribute('title', getMsg('tooltip'));
+    eqToggleButton.setAttribute('aria-label', getMsg('tooltip'));
 
     const svgNS = "http://www.w3.org/2000/svg";
     const btnSvg = document.createElementNS(svgNS, "svg");
@@ -900,22 +1090,7 @@ function injectEQButton() {
     btnSvg.appendChild(btnPath);
 
     eqToggleButton.appendChild(btnSvg);
-
-    eqToggleButton.onclick = () => {
-        if (!audioCtx) {
-            // Attempt initialization if not done yet
-            const video = document.querySelector('video');
-            if (video) initWebAudio(video);
-        }
-        const isVisible = eqContainer.classList.contains('yt-eq-visible');
-        if (isVisible) {
-            eqContainer.classList.remove('yt-eq-visible');
-            eqToggleButton.classList.remove('active');
-        } else {
-            eqContainer.classList.add('yt-eq-visible');
-            eqToggleButton.classList.add('active');
-        }
-    };
+    eqToggleButton.onclick = toggleHandler;
 
     // Append the EQ button to the right controls.
     try {
@@ -924,64 +1099,85 @@ function injectEQButton() {
             rightControls.prepend(eqToggleButton);
         }
     } catch (e) {
-        console.warn('[YT EQ] Failed to prepend button, falling back to append', e);
         try {
             rightControls.appendChild(eqToggleButton);
         } catch (e2) { }
     }
 }
 
-// Initialization and Event Loops
-function init() {
-    loadSettings();
-
-    let checkCount = 0;
-    const checkPlayer = setInterval(() => {
-        const video = document.querySelector('video');
-        const controls = document.querySelector('.ytp-right-controls');
-
-        if (video && controls) {
-            clearInterval(checkPlayer);
-
+// Core attachment logic with isolated try-catches so nothing blocks UI injection
+function tryAttach() {
+    try {
+        createUI();
+    } catch (e) {}
+    try {
+        injectEQButton();
+    } catch (e) {}
+    const video = document.querySelector('video');
+    if (video) {
+        try {
             initWebAudio(video);
             applyNormalizerGain();
-
-            createUI();
-            injectEQButton();
-
             if (!video.dataset.ytEqAttached) {
                 video.addEventListener('loadeddata', () => {
-                    initWebAudio(video);
-                    applyNormalizerGain();
+                    try {
+                        initWebAudio(video);
+                        applyNormalizerGain();
+                    } catch (err) {}
                 });
                 video.dataset.ytEqAttached = 'true';
             }
-        }
-
-        if (++checkCount > 100) clearInterval(checkPlayer);
-    }, 500);
+        } catch (e) {}
+    }
 }
+
+// Initialization and Event Loops
+function init() {
+    loadSettings();
+    tryAttach();
+
+    // Polling fallback
+    let checkCount = 0;
+    const checkPlayer = setInterval(() => {
+        tryAttach();
+        const btn = document.getElementById('ytp-eq-button');
+        if (btn && ++checkCount > 20) {
+            clearInterval(checkPlayer);
+        } else if (checkCount > 60) {
+            clearInterval(checkPlayer);
+        }
+    }, 500);
+
+    // MutationObserver to catch controls bar creation immediately
+    try {
+        const observer = new MutationObserver(() => {
+            const hasButton = document.getElementById('ytp-eq-button');
+            const hasControls = document.querySelector('.ytp-right-controls');
+            if (hasControls && !hasButton) {
+                tryAttach();
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
+}
+
+// Synchronize state when script is re-injected or SPA navigates
+window.__YT_EQ_SYNC__ = () => {
+    tryAttach();
+};
 
 // SPA support
 window.addEventListener('yt-navigate-finish', () => {
-    setTimeout(() => {
-        const video = document.querySelector('video');
-        if (video) {
-            initWebAudio(video);
-            applyNormalizerGain();
-        }
-        injectEQButton(); // Re-inject if control bar was fully recreated
-    }, 800);
+    setTimeout(tryAttach, 300);
+    setTimeout(tryAttach, 1000);
 });
 
 window.addEventListener('yt-page-data-updated', () => {
-    setTimeout(() => {
-        const video = document.querySelector('video');
-        if (video) {
-            initWebAudio(video);
-            applyNormalizerGain();
-        }
-    }, 800);
+    setTimeout(tryAttach, 300);
+    setTimeout(tryAttach, 1000);
 });
 
 init();
+
+})();
+
