@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 
-const YT_EQ_VERSION = '1.2.3';
+const YT_EQ_VERSION = '1.2.3.1';
 
 // Prevent duplicate execution of the exact same version instance
 if (window.__YT_EQ_RUNNING_VERSION__ === YT_EQ_VERSION) {
