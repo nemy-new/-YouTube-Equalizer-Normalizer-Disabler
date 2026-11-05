@@ -7,17 +7,19 @@
 <a id="english"></a>
 ## English
 
-A professional-grade audio enhancement extension for YouTube. This tool allows users to bypass YouTube's automatic volume normalization and fine-tune their audio experience using a dual-mode equalizer (3-Band and 10-Band), a preamp, and a brickwall limiter.
+A professional-grade audio enhancement extension for YouTube and YouTube Music. This tool allows users to bypass automatic volume normalization and fine-tune their audio experience using a dual-mode equalizer (3-Band and 10-Band), a preamp, and a brickwall limiter.
 
 ### Features
-- **Normalizer Disabler**: Restores original track dynamics by disabling YouTube's automatic loudness leveling.
+- **Normalizer Disabler**: Restores original track dynamics by disabling automatic loudness leveling.
 - **Dual Equalizer Modes**: 
   - **3-Band (Basic)**: Quick control over Low, Mid, and High frequencies with rotary knobs.
   - **10-Band (Pro)**: Precise 10-band slider controls ranging from 32Hz to 16kHz.
 - **Preset Management**: Built-in default presets (Bass Boost, Vocal, Cinematic, etc.) and the ability to save, name, and delete your own Custom Presets.
-- **Preamp (Master Gain)**: Powerful overall volume control to boost quiet videos.
+- **Preamp (Master Gain)**: Powerful overall volume control to boost quiet videos and tracks.
+- **Direct Value Input**: Click on any value readout to enter exact dB values (e.g. `5`, `+2`, `-2`, `=-4`) or fine-tune with scroll wheel and arrow keys.
+- **Real-time Spectrum Analyzer**: Beautiful, zero-CPU-overhead visualizer with peak-hold meters toggleable via Google Material Symbols button.
 - **Brickwall Limiter**: Prevents all digital clipping and distortion even with heavy EQ boosts.
-- **Seamless UI**: Beautiful dark-mode interface integrated directly into the YouTube player controls.
+- **Seamless UI**: Beautiful dark-mode interface integrated directly into YouTube and YouTube Music player controls.
 
 ### Installation
 
@@ -42,7 +44,7 @@ First, download this repository as a ZIP file and extract it.
 *(Note: Firefox temporary add-ons are removed when the browser restarts.)*
 
 ### Disclaimer
-*The developer assumes no responsibility for any damage to audio hardware, hearing, or any other damages resulting from the use of this extension. Please use at your own risk and avoid excessive volume levels.
+*The developer assumes no responsibility for any damage to audio hardware, hearing, or any other damages resulting from the use of this extension. Please use at your own risk and avoid excessive volume levels.*
 
 ### License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -52,17 +54,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <a id="日本語"></a>
 ## 日本語
 
-YouTubeの自動音量調整（ノーマライザー）を解除し、プロ仕様のイコライザー（3バンド/10バンド）、プリアンプ、リミッターを提供するオーディオ拡張機能です。
+YouTube および YouTube Music の自動音量調整（ノーマライザー）を解除し、プロ仕様のイコライザー（3バンド/10バンド）、プリアンプ、リミッターを提供するオーディオ拡張機能です。
 
 ### 特徴
-- **ノーマライザー無効化**: YouTube独自の音量平均化を解除し、クリエイターが意図した本来のダイナミクスと迫力を復元します。
+- **ノーマライザー無効化**: 自動音量調整を解除し、クリエイターが意図した本来のダイナミクスと迫力を復元します。
 - **2つのイコライザーモード**:
   - **3-Band (Basic)**: 低音・中域・高音を直感的なツマミでサクッと調整。
   - **10-Band (Pro)**: 32Hzから16kHzまでの10バンドを細かく追い込める本格スライダー。
 - **プリセット機能**: 用意されたデフォルト設定（低音ブーストやボーカル強調など）に加え、自分好みの設定に名前をつけて保存できる「カスタムプリセット機能」を搭載。
-- **プリアンプ**: 音が小さい動画でも、全体の音量を底上げ・調整可能。
+- **プリアンプ**: 音が小さい動画や楽曲でも、全体の音量を底上げ・調整可能。
+- **数値の直接入力・微調整**: 各帯域やプリアンプの数値を直接クリックして目的の値（例: `5`、`+2`、`-2`、`=-4`）を即座に入力可能。ホイールや矢印キーでの微調整にも対応。
+- **リアルタイム・スペクトラムアナライザー**: Google Material Symbols アイコンからワンクリックでON/OFF可能な高精度ビジュアライザー（ピークホールド機能付き）。
 - **ブリックウォール・リミッター**: 強力な過入力防止。音量を極端に上げても不快な音割れ（クリッピング）を自動で防ぎます。
-- **UI**: YouTubeの動画プレイヤーに自然に溶け込むように設計しました。
+- **UI**: YouTube および YouTube Music のプレイヤーに自然に溶け込むように設計しました。
 
 ### インストール方法
 
@@ -97,17 +101,19 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 <a id="한국어"></a>
 ## 한국어
 
-YouTube의 자동 볼륨 조절(노멀라이저)을 비활성화하고 3밴드/10밴드 이퀄라이저를 제공하는 오디오 확장 프로그램입니다.
+YouTube 및 YouTube Music의 자동 볼륨 조절(노멀라이저)을 비활성화하고 3밴드/10밴드 이퀄라이저를 제공하는 오디오 확장 프로그램입니다.
 
 ### 특징
-- **노멀라이저 비활성화**: YouTube의 자동 볼륨 평준화를 해제하여 원본 트랙의 다이내믹스를 복원합니다.
+- **노멀라이저 비활성화**: 자동 볼륨 평준화를 해제하여 원본 트랙의 다이내믹스를 복원합니다.
 - **2가지 이퀄라이저 모드**:
   - **3-Band (Basic)**: 저음, 중음, 고음을 직관적인 노브로 쉽게 조절합니다.
   - **10-Band (Pro)**: 32Hz에서 16kHz까지 세밀하게 조절할 수 있는 10밴드 슬라이더를 제공합니다.
 - **프리셋 기능**: 기본 제공 프리셋(베이스 부스트, 보컬 강조 등) 외에 자신만의 설정을 저장하고 관리할 수 있습니다.
-- **프리앰프**: 소리가 작은 동영상의 전체 볼륨을 높일 수 있습니다.
+- **프리앰프**: 소리가 작은 동영상이나 음원의 전체 볼륨을 높일 수 있습니다.
+- **수치 직접 입력**: 게인 수치를 클릭하여 원하는 값(예: `5`, `+2`, `-2`, `=-4`)을 직접 입력하거나 마우스 휠 및 방향키로 미세 조정할 수 있습니다.
+- **실시간 스펙트럼 분석기**: Google Material Symbols 아이콘 버튼으로 손쉽게 켜고 끌 수 있는 고성능 비주얼라이저(피크 홀드 기능 포함).
 - **클리핑 방지 (Limiter)**: 극단적인 이퀄라이저 부스트 시에도 소리 깨짐(클리핑)을 방지합니다.
-- **UI**: YouTube 동영상 플레이어에 자연스럽게 통합되는 디자인입니다.
+- **UI**: YouTube 및 YouTube Music 플레이어에 자연스럽게 통합되는 디자인입니다.
 
 ### 설치 방법
 
@@ -142,17 +148,19 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 <a id="русский"></a>
 ## Русский
 
-Расширение для улучшения звука на YouTube. Отключает автоматическую нормализацию громкости и предоставляет профессиональный эквалайзер (3-полосный/10-полосный), предусилитель и лимитер.
+Расширение для улучшения звука на YouTube и YouTube Music. Отключает автоматическую нормализацию громкости и предоставляет профессиональный эквалайзер (3-полосный/10-полосный), предусилитель и лимитер.
 
 ### Особенности
-- **Отключение нормализатора**: Восстанавливает оригинальную динамику звука, отключая выравнивание громкости YouTube.
+- **Отключение нормализатора**: Восстанавливает оригинальную динамику звука, отключая выравнивание громкости.
 - **Два режима эквалайзера**:
   - **3-Band (Basic)**: Быстрая настройка низких, средних и высоких частот с помощью регуляторов.
   - **10-Band (Pro)**: Точные 10-полосные ползунки от 32 Гц до 16 кГц.
 - **Управление пресетами**: Встроенные пресеты (Усиление басов, Вокал и т.д.) и возможность сохранять свои настройки.
-- **Предусилитель**: Общее усиление громкости для тихих видео.
+- **Предусилитель**: Общее усиление громкости для тихих видео и треков.
+- **Прямой ввод значений**: Нажмите на числовые значения, чтобы ввести точное значение (например, `5`, `+2`, `-2`, `=-4`), или настройте колесом мыши и стрелками.
+- **Спектральный анализатор в реальном времени**: Красивый визуализатор звука с индикаторами пиков, включаемый кнопкой Google Material Symbols.
 - **Лимитер (Антиклип)**: Предотвращает искажения и клиппинг даже при сильном усилении частот.
-- **Интерфейс**: Темная тема, органично встроенная в плеер YouTube.
+- **Интерфейс**: Темная тема, органично встроенная в плеер YouTube и YouTube Music.
 
 ### Установка
 
@@ -187,17 +195,19 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
 <a id="简体中文"></a>
 ## 简体中文
 
-YouTube 音频增强扩展程序。禁用 YouTube 的自动音量标准化，并提供专业级均衡器（3 段/10 段）、前置放大器和防破音限制器。
+YouTube 和 YouTube Music 音频增强扩展程序。禁用自动音量标准化，并提供专业级均衡器（3 段/10 段）、前置放大器和防破音限制器。
 
 ### 特点
-- **禁用音量标准化**：解除 YouTube 的自动音量平衡，恢复原始音轨的动态范围。
+- **禁用音量标准化**：解除自动音量平衡，恢复原始音轨的动态范围。
 - **两种均衡器模式**：
   - **3-Band (Basic)**：通过旋钮快速调整低音、中音和高音。
   - **10-Band (Pro)**：从 32Hz 到 16kHz 的 10 段精确滑块控制。
 - **预设管理**：内置预设（低音增强、人声等），并支持保存、命名和管理您自己的自定义预设。
-- **前置放大器**：为声音较小的视频提供整体音量提升。
+- **前置放大器**：为声音较小的视频和音轨提供整体音量提升。
+- **数值直接输入**：点击数值读数直接输入确切分贝值（如 `5`、`+2`、`-2`、`=-4`），或通过滚轮和方向键进行微调。
+- **实时频谱分析仪**：通过 Google Material Symbols 图标按钮一键开启/关闭的高精度音频可视化仪（带峰值保持功能）。
 - **防破音 (Limiter)**：即使大幅度增强频率，也能自动防止声音失真和破音。
-- **无缝 UI**：精美的深色模式界面，完美融入 YouTube 播放器控制栏。
+- **无缝 UI**：精美的深色模式界面，完美融入 YouTube 和 YouTube Music 播放器控制栏。
 
 ### 安装方法
 

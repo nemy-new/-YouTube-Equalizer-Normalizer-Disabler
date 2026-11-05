@@ -3,7 +3,7 @@
         "message": "YouTube 이퀄라이저 & 노멀라이저 비활성화"
     },
     "extensionDescription": {
-        "message": "YouTube의 자동 볼륨 조절(노멀라이저)을 비활성화하고 3밴드/10밴드 이퀄라이저를 제공합니다."
+        "message": "YouTube 및 YouTube Music의 자동 볼륨 조절(노멀라이저)을 비활성화하고 3밴드/10밴드 이퀄라이저를 제공합니다."
     },
     "title": { "message": "이퀄라이저" },
     "preamp": { "message": "프리앰프" },
@@ -11,7 +11,7 @@
     "mid": { "message": "중음" },
     "high": { "message": "고음" },
     "normalizerOff": { "message": "노멀라이저 비활성화됨" },
-    "normalizerOn": { "message": "노멀라이저" },
+    "normalizerOn": { "message": "노멀라이저 활성화됨" },
     "limiter": { "message": "클리핑 방지 (Limiter)" },
     "reset": { "message": "초기화" },
     "tooltip": { "message": "이퀄라이저" },
@@ -29,5 +29,7 @@
     "defaultPresetsGroup": { "message": "기본 프리셋" },
     "deleteTitle": { "message": "프리셋 삭제" },
     "deleteConfirm": { "message": "이 프리셋을 삭제하시겠습니까?" },
-    "customUnsaved": { "message": "사용자 지정" }
+    "customUnsaved": { "message": "사용자 지정" },
+    "enterValue": { "message": "클릭하여 직접 입력 (5 = 값 지정, +2 / -2 = 증감, =-4 = 음수 지정, 휠/화살표 = 미세 조정)" },
+    "spectrumAnalyzer": { "message": "스펙트럼 분석기" }
 }

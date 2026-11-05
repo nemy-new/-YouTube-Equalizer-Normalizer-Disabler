@@ -3,15 +3,15 @@
         "message": "YouTube イコライザー & ノーマライザー無効化"
     },
     "extensionDescription": {
-        "message": "YouTubeの自動音量調整(ノーマライザー)を無効化し、3バンド/10バンドのイコライザーを提供します。"
+        "message": "YouTube & YouTube Musicの自動音量調整(ノーマライザー)を無効化し、3バンド/10バンドのイコライザーを提供します。"
     },
     "title": { "message": "イコライザー" },
-    "preamp": { "message": "Pre" },
+    "preamp": { "message": "プリアンプ" },
     "low": { "message": "低音" },
-    "mid": { "message": "中域" },
-    "high": { "message": "トレブル" },
-    "normalizerOff": { "message": "ノーマライザー無効化" },
-    "normalizerOn": { "message": "ノーマライザー" },
+    "mid": { "message": "中音" },
+    "high": { "message": "高音" },
+    "normalizerOff": { "message": "ノーマライザー無効" },
+    "normalizerOn": { "message": "ノーマライザー有効" },
     "limiter": { "message": "音割れ防止 (Limiter)" },
     "reset": { "message": "リセット" },
     "tooltip": { "message": "イコライザー" },
@@ -25,9 +25,11 @@
     "presetVocal": { "message": "ボーカル強調" },
     "presetCinematic": { "message": "シネマティック" },
     "presetPodcast": { "message": "ポッドキャスト" },
-    "customPresetsGroup": { "message": "カスタム" },
-    "defaultPresetsGroup": { "message": "デフォルト" },
-    "deleteTitle": { "message": "プリセットを削除" },
-    "deleteConfirm": { "message": "このプリセットを削除しますか？" },
-    "customUnsaved": { "message": "カスタム" }
+    "customPresetsGroup": { "message": "カスタムプリセット" },
+    "defaultPresetsGroup": { "message": "デフォルトプリセット" },
+    "deleteTitle": { "message": "プリセットの削除" },
+    "deleteConfirm": { "message": "このプリセットを削除してもよろしいですか？" },
+    "customUnsaved": { "message": "カスタム" },
+    "enterValue": { "message": "クリックで直接入力（5 = 指定値 / +2・-2 = 増減 / =-4 = マイナス値を指定 / ホイール・矢印キーで微調整）" },
+    "spectrumAnalyzer": { "message": "スペクトラムアナライザー" }
 }

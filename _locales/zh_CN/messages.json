@@ -3,7 +3,7 @@
         "message": "YouTube 均衡器 & 音量标准化禁用器"
     },
     "extensionDescription": {
-        "message": "禁用 YouTube 的自动音量标准化，并提供 3 段/10 段均衡器。"
+        "message": "禁用 YouTube 和 YouTube Music 的自动音量标准化，并提供 3 段/10 段均衡器。"
     },
     "title": { "message": "均衡器" },
     "preamp": { "message": "前置放大器" },
@@ -11,7 +11,7 @@
     "mid": { "message": "中音" },
     "high": { "message": "高音" },
     "normalizerOff": { "message": "音量标准化已禁用" },
-    "normalizerOn": { "message": "音量标准化" },
+    "normalizerOn": { "message": "音量标准化已启用" },
     "limiter": { "message": "防破音 (Limiter)" },
     "reset": { "message": "重置" },
     "tooltip": { "message": "均衡器" },
@@ -29,5 +29,7 @@
     "defaultPresetsGroup": { "message": "默认预设" },
     "deleteTitle": { "message": "删除预设" },
     "deleteConfirm": { "message": "您确定要删除此预设吗？" },
-    "customUnsaved": { "message": "自定义" }
+    "customUnsaved": { "message": "自定义" },
+    "enterValue": { "message": "点击直接输入（5 = 设定值，+2 / -2 = 增减，=-4 = 设定负值，滚轮/方向键 = 微调）" },
+    "spectrumAnalyzer": { "message": "频谱分析仪" }
 }

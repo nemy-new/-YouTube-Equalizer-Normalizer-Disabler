@@ -3,7 +3,7 @@
         "message": "YouTube Эквалайзер и Отключение Нормализатора"
     },
     "extensionDescription": {
-        "message": "Отключает автоматическую нормализацию громкости YouTube и предоставляет 3-полосный/10-полосный эквалайзер."
+        "message": "Отключает автоматическую нормализацию громкости YouTube и YouTube Music и предоставляет 3-полосный/10-полосный эквалайзер."
     },
     "title": { "message": "Эквалайзер" },
     "preamp": { "message": "Преамп" },
@@ -11,7 +11,7 @@
     "mid": { "message": "Средние" },
     "high": { "message": "Высокие" },
     "normalizerOff": { "message": "Нормализатор Отключен" },
-    "normalizerOn": { "message": "Нормализатор" },
+    "normalizerOn": { "message": "Нормализатор Включен" },
     "limiter": { "message": "Лимитер (Антиклип)" },
     "reset": { "message": "Сброс" },
     "tooltip": { "message": "Эквалайзер" },
@@ -29,5 +29,7 @@
     "defaultPresetsGroup": { "message": "Стандартные" },
     "deleteTitle": { "message": "Удалить Пресет" },
     "deleteConfirm": { "message": "Вы уверены, что хотите удалить этот пресет?" },
-    "customUnsaved": { "message": "Свой" }
+    "customUnsaved": { "message": "Свой" },
+    "enterValue": { "message": "Нажмите для ввода (5 = задать, +2 / -2 = изменить, =-4 = отрицательное, колесо/стрелки = точно)" },
+    "spectrumAnalyzer": { "message": "Спектральный анализатор" }
 }

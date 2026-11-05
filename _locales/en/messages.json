@@ -3,7 +3,7 @@
         "message": "YouTube Equalizer & Normalizer Disabler"
     },
     "extensionDescription": {
-        "message": "Disables YouTube's automatic volume normalization and provides a 3-band/10-band equalizer."
+        "message": "Disables YouTube & YouTube Music's automatic volume normalization and provides a 3-band/10-band equalizer."
     },
     "title": { "message": "Equalizer" },
     "preamp": { "message": "Preamp" },
@@ -11,7 +11,7 @@
     "mid": { "message": "Mid" },
     "high": { "message": "High" },
     "normalizerOff": { "message": "Normalizer Disabled" },
-    "normalizerOn": { "message": "Normalizer" },
+    "normalizerOn": { "message": "Normalizer Enabled" },
     "limiter": { "message": "Limiter (Anti-clip)" },
     "reset": { "message": "Reset" },
     "tooltip": { "message": "Equalizer" },
@@ -29,5 +29,7 @@
     "defaultPresetsGroup": { "message": "Default Presets" },
     "deleteTitle": { "message": "Delete Preset" },
     "deleteConfirm": { "message": "Are you sure you want to delete this preset?" },
-    "customUnsaved": { "message": "Custom" }
+    "customUnsaved": { "message": "Custom (Unsaved)" },
+    "enterValue": { "message": "Click to edit (5 = set, +2 / -2 = adjust, =-4 = set negative, wheel/arrows = fine tune)" },
+    "spectrumAnalyzer": { "message": "Spectrum Analyzer" }
 }

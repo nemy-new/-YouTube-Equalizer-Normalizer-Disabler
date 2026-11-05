@@ -4,8 +4,9 @@
     bottom: 62px !important;
     /* Elevated above video control bar and seekbar/scrubber */
     right: 20px !important;
-    width: max-content !important;
-    min-width: 540px !important;
+    width: min(560px, calc(100vw - 40px)) !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 40px) !important;
     background-color: rgba(0, 0, 0, 0.85) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -20,6 +21,7 @@
     border: none !important;
     user-select: none !important;
     overflow: hidden !important;
+    transition: height 0.35s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease !important;
 }
 
 .yt-eq-container.yt-eq-visible {
@@ -27,6 +29,23 @@
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
+}
+
+/* YouTube Music Specific Styling for Container */
+.yt-eq-container.ytmusic-mode {
+    position: fixed !important;
+    bottom: 82px !important; /* Elevated 10px above YouTube Music's 72px bottom player bar */
+    right: 16px !important;
+    width: min(560px, calc(100vw - 32px)) !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 32px) !important;
+    z-index: 10001 !important;
+    background-color: rgba(24, 24, 24, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75) !important;
+    border-radius: 12px !important;
 }
 
 /* Prevent controls and seekbar from auto-hiding when EQ is open */
@@ -48,11 +67,6 @@
     cursor: default !important;
 }
 
-/* Add a transition to the container itself to smooth out any sub-pixel layout shifts */
-.yt-eq-container {
-    transition: all 0.3s ease-in-out !important;
-}
-
 /* Force border-box sizing to stop YouTube global CSS interference */
 .yt-eq-container * {
     box-sizing: border-box !important;
@@ -69,31 +83,16 @@
     height: 44px !important;
 }
 
-.yt-eq-title-main {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    margin-right: 12px !important;
-    margin-left: 4px !important;
-}
-
 .yt-eq-title-text {
+    grid-column: 1 !important;
+    justify-self: start !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     color: #f1f1f1 !important;
+    white-space: nowrap !important;
 }
 
 /* Basic Mode (3-Knob Rotary) */
-.yt-eq-basic-controls {
-    display: flex !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    width: 100% !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-
 .yt-eq-knob-container {
     display: flex !important;
     flex-direction: column !important;
@@ -113,6 +112,7 @@
     width: 84px !important;
     height: 84px !important;
     cursor: ns-resize !important;
+    touch-action: none !important;
 }
 
 /* SVG Container */
@@ -163,25 +163,130 @@
     background-color: transparent !important;
 }
 
-.yt-eq-close {
+.yt-eq-analyzer-btn {
     grid-column: 3 !important;
     justify-self: end !important;
     cursor: pointer !important;
-    background: none !important;
+    background: transparent !important;
     border: none !important;
-    color: #f1f1f1 !important;
-    font-size: 20px !important;
-    padding: 8px !important;
+    color: #888888 !important;
+    padding: 6px !important;
     margin: 0 !important;
-    line-height: 1 !important;
     border-radius: 50% !important;
-    display: flex !important;
+    display: inline-flex !important;
     justify-content: center !important;
     align-items: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease !important;
+    outline: none !important;
 }
 
-.yt-eq-close:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+.yt-eq-analyzer-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+}
+
+.yt-eq-analyzer-btn.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.yt-eq-analyzer-btn.active:hover {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.yt-eq-analyzer-btn svg,
+.yt-eq-analyzer-btn .yt-eq-analyzer-icon {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 20px !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+/* Spectrum Analyzer View (Full Popup) */
+.yt-eq-container.yt-eq-spectrum-view {
+    min-width: 0 !important;
+    width: min(560px, calc(100vw - 40px)) !important;
+}
+
+.yt-eq-container.ytmusic-mode.yt-eq-spectrum-view {
+    min-width: 0 !important;
+    width: min(560px, calc(100vw - 32px)) !important;
+}
+
+/* Header elements smooth transitions */
+.yt-eq-mode-toggle {
+    transition: opacity 0.25s cubic-bezier(0.2, 0, 0, 1), transform 0.25s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+.yt-eq-container.yt-eq-spectrum-view .yt-eq-mode-toggle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.92) !important;
+}
+
+/* Body View Wrapper for smooth morphing transitions */
+.yt-eq-body-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* EQ Controls Body View (crossfades out in spectrum view) */
+.yt-eq-eq-body {
+    width: 100% !important;
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    transition: opacity 0.25s cubic-bezier(0.2, 0, 0, 1), transform 0.25s cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+.yt-eq-container.yt-eq-spectrum-view .yt-eq-eq-body {
+    opacity: 0 !important;
+    transform: translateY(-8px) scale(0.97) !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s !important;
+}
+
+/* Spectrum Analyzer View (crossfades in) */
+.yt-eq-visualizer-container {
+    width: 100% !important;
+    padding: 0 14px 14px 14px !important;
+    box-sizing: border-box !important;
+    opacity: 0 !important;
+    transform: translateY(8px) scale(0.97) !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s !important;
+}
+
+.yt-eq-container.yt-eq-spectrum-view .yt-eq-visualizer-container {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    visibility: visible !important;
+    transition: opacity 0.28s cubic-bezier(0.2, 0, 0, 1) 0.05s, transform 0.28s cubic-bezier(0.2, 0, 0, 1) 0.05s !important;
+}
+
+.yt-eq-visualizer-canvas {
+    width: 100% !important;
+    height: 310px !important;
+    display: block !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
 }
 
 .ytp-eq-button.ytp-button {
@@ -198,6 +303,52 @@
     fill: #fff;
     width: 20px;
     height: 20px;
+}
+
+/* YouTube Music Player Bar Button */
+.ytmusic-player-bar-eq-btn {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 8px !important;
+    margin: 0 2px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    color: var(--ytmusic-text-secondary, #909090) !important;
+    fill: currentColor !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
+    user-select: none !important;
+}
+
+.ytmusic-player-bar-eq-btn:hover {
+    background-color: var(--ytmusic-color-white10, rgba(255, 255, 255, 0.1)) !important;
+    color: var(--ytmusic-text-primary, #ffffff) !important;
+}
+
+.ytmusic-player-bar-eq-btn:active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ytmusic-player-bar-eq-btn.active {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+}
+
+.ytmusic-player-bar-eq-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+    display: block !important;
+    fill: currentColor !important;
+    pointer-events: none !important;
+    transition: fill 0.15s ease !important;
 }
 
 /* Footer & Normalizer Toggle */
@@ -457,6 +608,7 @@ input:checked+.yt-eq-slider-toggle:before {
     flex-direction: row !important;
     padding: 0px 16px 8px !important;
     gap: 16px !important;
+    overflow-x: auto !important;
 }
 
 
@@ -491,6 +643,50 @@ input:checked+.yt-eq-slider-toggle:before {
     font-variant-numeric: tabular-nums !important;
 }
 
+/* Click-to-edit numeric values */
+.yt-eq-value-editable {
+    cursor: text !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.yt-eq-value-editable:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+}
+
+.yt-eq-value-editable[data-editing] {
+    background-color: transparent !important;
+    padding: 0 !important;
+}
+
+.yt-eq-value-input {
+    width: 56px !important;
+    height: 22px !important;
+    padding: 0 4px !important;
+    margin: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 4px !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-variant-numeric: tabular-nums !important;
+    text-align: center !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(62, 166, 255, 0.35) !important;
+}
+
+.yt-eq-value-input::placeholder {
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.yt-eq-slider-val .yt-eq-value-input {
+    width: 44px !important;
+    font-size: 11px !important;
+}
+
 .yt-eq-vertical-slider-wrapper {
     position: relative !important;
     height: 120px !important;
@@ -499,12 +695,14 @@ input:checked+.yt-eq-slider-toggle:before {
 
 .yt-eq-vertical-slider {
     position: absolute !important;
+    appearance: none !important;
     -webkit-appearance: none !important;
     width: 120px !important;
     height: 4px !important;
     background: rgba(255, 255, 255, 0.2) !important;
     border-radius: 2px !important;
     outline: none !important;
+    cursor: pointer !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) rotate(-90deg) !important;
@@ -515,6 +713,23 @@ input:checked+.yt-eq-slider-toggle:before {
     -webkit-appearance: none !important;
     width: 16px !important;
     height: 16px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.yt-eq-vertical-slider::-moz-range-track {
+    height: 4px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 2px !important;
+}
+
+.yt-eq-vertical-slider::-moz-range-thumb {
+    width: 16px !important;
+    height: 16px !important;
+    border: none !important;
     border-radius: 50% !important;
     background: #fff !important;
     cursor: pointer !important;
