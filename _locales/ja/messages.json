@@ -30,6 +30,6 @@
     "deleteTitle": { "message": "プリセットの削除" },
     "deleteConfirm": { "message": "このプリセットを削除してもよろしいですか？" },
     "customUnsaved": { "message": "カスタム" },
-    "enterValue": { "message": "クリックで直接入力（5 = 指定値 / +2・-2 = 増減 / =-4 = マイナス値を指定 / ホイール・矢印キーで微調整）" },
+    "enterValue": { "message": "クリックで直接入力（例: -4, 5 / ホイール・矢印キーで微調整）" },
     "spectrumAnalyzer": { "message": "スペクトラムアナライザー" }
 }

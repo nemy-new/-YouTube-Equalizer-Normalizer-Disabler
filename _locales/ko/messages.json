@@ -30,6 +30,6 @@
     "deleteTitle": { "message": "프리셋 삭제" },
     "deleteConfirm": { "message": "이 프리셋을 삭제하시겠습니까?" },
     "customUnsaved": { "message": "사용자 지정" },
-    "enterValue": { "message": "클릭하여 직접 입력 (5 = 값 지정, +2 / -2 = 증감, =-4 = 음수 지정, 휠/화살표 = 미세 조정)" },
+    "enterValue": { "message": "클릭하여 직접 입력 (예: -4, 5 / 휠·화살표 키로 미세 조정)" },
     "spectrumAnalyzer": { "message": "스펙트럼 분석기" }
 }

@@ -30,6 +30,6 @@
     "deleteTitle": { "message": "Delete Preset" },
     "deleteConfirm": { "message": "Are you sure you want to delete this preset?" },
     "customUnsaved": { "message": "Custom (Unsaved)" },
-    "enterValue": { "message": "Click to edit (5 = set, +2 / -2 = adjust, =-4 = set negative, wheel/arrows = fine tune)" },
+    "enterValue": { "message": "Click to edit (e.g. -4, 5 / wheel or arrow keys to fine-tune)" },
     "spectrumAnalyzer": { "message": "Spectrum Analyzer" }
 }

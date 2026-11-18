@@ -30,6 +30,6 @@
     "deleteTitle": { "message": "删除预设" },
     "deleteConfirm": { "message": "您确定要删除此预设吗？" },
     "customUnsaved": { "message": "自定义" },
-    "enterValue": { "message": "点击直接输入（5 = 设定值，+2 / -2 = 增减，=-4 = 设定负值，滚轮/方向键 = 微调）" },
+    "enterValue": { "message": "点击直接输入（如 -4, 5 / 滚轮或方向键微调）" },
     "spectrumAnalyzer": { "message": "频谱分析仪" }
 }

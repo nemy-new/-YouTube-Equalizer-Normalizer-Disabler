@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 
-const YT_EQ_VERSION = '1.3.0-beta';
+const YT_EQ_VERSION = '1.3.0';
 const isYTMusic = window.location.hostname === 'music.youtube.com';
 
 // --- Extension Storage Bridge (runs only in ISOLATED content-script world) ---
@@ -112,7 +112,7 @@ const I18N_FALLBACK = {
         customPresetsGroup: 'Custom Presets', defaultPresetsGroup: 'Default Presets',
         deleteTitle: 'Delete Preset', deleteConfirm: 'Are you sure you want to delete this preset?',
         customUnsaved: 'Custom (Unsaved)',
-        enterValue: 'Click to edit (5 = set, +2 / -2 = adjust, =-4 = set negative, wheel/arrows = fine tune)',
+        enterValue: 'Click to edit (e.g. -4, 5 / wheel or arrow keys to fine-tune)',
         spectrumAnalyzer: 'Spectrum Analyzer'
     },
     ja: {
@@ -126,7 +126,7 @@ const I18N_FALLBACK = {
         customPresetsGroup: 'カスタムプリセット', defaultPresetsGroup: 'デフォルトプリセット',
         deleteTitle: 'プリセットの削除', deleteConfirm: 'このプリセットを削除してもよろしいですか？',
         customUnsaved: 'カスタム',
-        enterValue: 'クリックで直接入力（5 = 指定値 / +2・-2 = 増減 / =-4 = マイナス値を指定 / ホイール・矢印キーで微調整）',
+        enterValue: 'クリックで直接入力（例: -4, 5 / ホイール・矢印キーで微調整）',
         spectrumAnalyzer: 'スペクトラムアナライザー'
     },
     ko: {
@@ -140,7 +140,7 @@ const I18N_FALLBACK = {
         customPresetsGroup: '사용자 지정 프리셋', defaultPresetsGroup: '기본 프리셋',
         deleteTitle: '프리셋 삭제', deleteConfirm: '이 프리셋을 삭제하시겠습니까?',
         customUnsaved: '사용자 지정',
-        enterValue: '클릭하여 직접 입력 (5 = 값 지정, +2 / -2 = 증감, =-4 = 음수 지정, 휠/화살표 = 미세 조정)',
+        enterValue: '클릭하여 직접 입력 (예: -4, 5 / 휠·화살표 키로 미세 조정)',
         spectrumAnalyzer: '스펙트럼 분석기'
     },
     ru: {
@@ -154,7 +154,7 @@ const I18N_FALLBACK = {
         customPresetsGroup: 'Свои пресеты', defaultPresetsGroup: 'Стандартные',
         deleteTitle: 'Удалить Пресет', deleteConfirm: 'Вы уверены, что хотите удалить этот пресет?',
         customUnsaved: 'Свой',
-        enterValue: 'Нажмите для ввода (5 = задать, +2 / -2 = изменить, =-4 = отрицательное, колесо/стрелки = точно)',
+        enterValue: 'Нажмите для ввода (напр. -4, 5 / колесо или стрелки для точной настройки)',
         spectrumAnalyzer: 'Спектральный анализатор'
     },
     zh: {
@@ -168,7 +168,7 @@ const I18N_FALLBACK = {
         customPresetsGroup: '自定义预设', defaultPresetsGroup: '默认预设',
         deleteTitle: '删除预设', deleteConfirm: '您确定要删除此预设吗？',
         customUnsaved: '自定义',
-        enterValue: '点击直接输入（5 = 设定值，+2 / -2 = 增减，=-4 = 设定负值，滚轮/方向键 = 微调）',
+        enterValue: '点击直接输入（如 -4, 5 / 滚轮或方向键微调）',
         spectrumAnalyzer: '频谱分析仪'
     }
 };
@@ -1412,23 +1412,16 @@ function createUI() {
     basicWrapper.appendChild(basicContent);
 
     // ====== Inline numeric value editor (click value -> type) ======
-    // Syntax:  "6" / "6dB"  -> set absolute value
-    //          "+2" / "-1.5" -> relative (add/subtract from current)
-    //          "=-4"         -> set absolute (use for negative absolute values)
+    // Syntax:  "6" / "6dB" / "-4" / "+2" -> set absolute value
     // Keys:    Enter = apply, Esc = cancel, Up/Down = ±0.1 (Shift: ±1)
     const clampDb = (v) => Math.round(Math.max(-20, Math.min(20, v)) * 10) / 10;
 
-    const parseValueInput = (raw, current) => {
+    const parseValueInput = (raw) => {
         let s = String(raw).trim().replace(/db$/i, '').replace(/[＋]/g, '+').replace(/[－−ー]/g, '-').replace(/[＝]/g, '=').trim();
         s = s.replace(/[０-９．]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0));
         if (!s) return null;
         if (s.startsWith('=')) {
-            const n = parseFloat(s.slice(1));
-            return Number.isFinite(n) ? n : null;
-        }
-        if (s.startsWith('+') || s.startsWith('-')) {
-            const n = parseFloat(s);
-            return Number.isFinite(n) ? current + n : null;
+            s = s.slice(1).trim();
         }
         const n = parseFloat(s);
         return Number.isFinite(n) ? n : null;
@@ -1482,7 +1475,7 @@ function createUI() {
             input.inputMode = 'decimal';
             input.className = 'yt-eq-value-input';
             input.value = initialVal.toFixed(1);
-            input.setAttribute('placeholder', '+2 / -2 / 5');
+            input.setAttribute('placeholder', '-4 / 5');
             input.setAttribute('title', getMsg('enterValue'));
             input.setAttribute('aria-label', getMsg('enterValue'));
 
@@ -1511,7 +1504,7 @@ function createUI() {
                     commit(currentEditVal);
                     return;
                 }
-                const parsed = parseValueInput(rawVal, initialVal);
+                const parsed = parseValueInput(rawVal);
                 if (parsed !== null) {
                     commit(parsed);
                 } else {
@@ -1535,7 +1528,7 @@ function createUI() {
                 } else if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
                     ev.preventDefault();
                     const base = (dirty && !arrowMode)
-                        ? (parseValueInput(input.value, initialVal) ?? currentEditVal)
+                        ? (parseValueInput(input.value) ?? currentEditVal)
                         : currentEditVal;
                     const step = ev.shiftKey ? 1 : 0.1;
                     currentEditVal = clampDb(base + (ev.key === 'ArrowUp' ? step : -step));

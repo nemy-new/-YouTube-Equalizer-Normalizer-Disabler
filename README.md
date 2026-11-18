@@ -16,7 +16,7 @@ A professional-grade audio enhancement extension for YouTube and YouTube Music. 
   - **10-Band (Pro)**: Precise 10-band slider controls ranging from 32Hz to 16kHz.
 - **Preset Management**: Built-in default presets (Bass Boost, Vocal, Cinematic, etc.) and the ability to save, name, and delete your own Custom Presets.
 - **Preamp (Master Gain)**: Powerful overall volume control to boost quiet videos and tracks.
-- **Direct Value Input**: Click on any value readout to enter exact dB values (e.g. `5`, `+2`, `-2`, `=-4`) or fine-tune with scroll wheel and arrow keys.
+- **Direct Value Input**: Click on any value readout to enter exact dB values (e.g. `5`, `-4`) or fine-tune with scroll wheel and arrow keys.
 - **Real-time Spectrum Analyzer**: Beautiful, zero-CPU-overhead visualizer with peak-hold meters toggleable via Google Material Symbols button.
 - **Brickwall Limiter**: Prevents all digital clipping and distortion even with heavy EQ boosts.
 - **Seamless UI**: Beautiful dark-mode interface integrated directly into YouTube and YouTube Music player controls.
@@ -63,7 +63,7 @@ YouTube および YouTube Music の自動音量調整（ノーマライザー）
   - **10-Band (Pro)**: 32Hzから16kHzまでの10バンドを細かく追い込める本格スライダー。
 - **プリセット機能**: 用意されたデフォルト設定（低音ブーストやボーカル強調など）に加え、自分好みの設定に名前をつけて保存できる「カスタムプリセット機能」を搭載。
 - **プリアンプ**: 音が小さい動画や楽曲でも、全体の音量を底上げ・調整可能。
-- **数値の直接入力・微調整**: 各帯域やプリアンプの数値を直接クリックして目的の値（例: `5`、`+2`、`-2`、`=-4`）を即座に入力可能。ホイールや矢印キーでの微調整にも対応。
+- **数値の直接入力・微調整**: 各帯域やプリアンプの数値を直接クリックして目的の値（例: `5`、`-4`）を即座に入力可能。ホイールや矢印キーでの微調整にも対応。
 - **リアルタイム・スペクトラムアナライザー**: Google Material Symbols アイコンからワンクリックでON/OFF可能な高精度ビジュアライザー（ピークホールド機能付き）。
 - **ブリックウォール・リミッター**: 強力な過入力防止。音量を極端に上げても不快な音割れ（クリッピング）を自動で防ぎます。
 - **UI**: YouTube および YouTube Music のプレイヤーに自然に溶け込むように設計しました。
@@ -110,7 +110,7 @@ YouTube 및 YouTube Music의 자동 볼륨 조절(노멀라이저)을 비활성�
   - **10-Band (Pro)**: 32Hz에서 16kHz까지 세밀하게 조절할 수 있는 10밴드 슬라이더를 제공합니다.
 - **프리셋 기능**: 기본 제공 프리셋(베이스 부스트, 보컬 강조 등) 외에 자신만의 설정을 저장하고 관리할 수 있습니다.
 - **프리앰프**: 소리가 작은 동영상이나 음원의 전체 볼륨을 높일 수 있습니다.
-- **수치 직접 입력**: 게인 수치를 클릭하여 원하는 값(예: `5`, `+2`, `-2`, `=-4`)을 직접 입력하거나 마우스 휠 및 방향키로 미세 조정할 수 있습니다.
+- **수치 직접 입력**: 게인 수치를 클릭하여 원하는 값(예: `5`, `-4`)을 직접 입력하거나 마우스 휠 및 방향키로 미세 조정할 수 있습니다.
 - **실시간 스펙트럼 분석기**: Google Material Symbols 아이콘 버튼으로 손쉽게 켜고 끌 수 있는 고성능 비주얼라이저(피크 홀드 기능 포함).
 - **클리핑 방지 (Limiter)**: 극단적인 이퀄라이저 부스트 시에도 소리 깨짐(클리핑)을 방지합니다.
 - **UI**: YouTube 및 YouTube Music 플레이어에 자연스럽게 통합되는 디자인입니다.
@@ -157,7 +157,7 @@ https://chromewebstore.google.com/detail/mahadhmfdbkmghggoakjckbmjfbhkmkm?utm_so
   - **10-Band (Pro)**: Точные 10-полосные ползунки от 32 Гц до 16 кГц.
 - **Управление пресетами**: Встроенные пресеты (Усиление басов, Вокал и т.д.) и возможность сохранять свои настройки.
 - **Предусилитель**: Общее усиление громкости для тихих видео и треков.
-- **Прямой ввод значений**: Нажмите на числовые значения, чтобы ввести точное значение (например, `5`, `+2`, `-2`, `=-4`), или настройте колесом мыши и стрелками.
+- **Прямой ввод значений**: Нажмите на числовые значения, чтобы ввести точное значение (например, `5`, `-4`), или настройте колесом мыши и стрелками.
 - **Спектральный анализатор в реальном времени**: Красивый визуализатор звука с индикаторами пиков, включаемый кнопкой Google Material Symbols.
 - **Лимитер (Антиклип)**: Предотвращает искажения и клиппинг даже при сильном усилении частот.
 - **Интерфейс**: Темная тема, органично встроенная в плеер YouTube и YouTube Music.
@@ -204,7 +204,7 @@ YouTube 和 YouTube Music 音频增强扩展程序。禁用自动音量标准化
   - **10-Band (Pro)**：从 32Hz 到 16kHz 的 10 段精确滑块控制。
 - **预设管理**：内置预设（低音增强、人声等），并支持保存、命名和管理您自己的自定义预设。
 - **前置放大器**：为声音较小的视频和音轨提供整体音量提升。
-- **数值直接输入**：点击数值读数直接输入确切分贝值（如 `5`、`+2`、`-2`、`=-4`），或通过滚轮和方向键进行微调。
+- **数值直接输入**：点击数值读数直接输入确切分贝值（如 `5`、`-4`），或通过滚轮和方向键进行微调。
 - **实时频谱分析仪**：通过 Google Material Symbols 图标按钮一键开启/关闭的高精度音频可视化仪（带峰值保持功能）。
 - **防破音 (Limiter)**：即使大幅度增强频率，也能自动防止声音失真和破音。
 - **无缝 UI**：精美的深色模式界面，完美融入 YouTube 和 YouTube Music 播放器控制栏。
